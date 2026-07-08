@@ -76,7 +76,7 @@ export default function CategorySection() {
                   alt={`Shop ${cat.label.replace(/[()]/g, "")}`}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className={`object-center transition-transform duration-700 ease-out rounded-xl scale-130 group-hover:scale-[1.5] ${cat.objectFit}`}
+                  className={`object-center transition-all duration-700 ease-out rounded-xl scale-130 group-hover:scale-[1.5] brightness-80 group-hover:brightness-100 ${cat.objectFit}`}
                 />
               </div>
             </Link>

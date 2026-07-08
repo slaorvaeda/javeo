@@ -4,7 +4,7 @@ import Footer from "@/components/layout/Footer";
 import AOSInit from "@/components/common/AOSInit";
 
 export const metadata = {
-  title: "Cosmira Skincare | Premium Skincare Routines & Products",
+  title: "Javeo | Premium Skincare Routines & Products",
   description: "Discover clean, dermatologist-tested, premium skincare formulations. Take our skin quiz to find your perfect daily routine.",
   icons: {
     icon: "/logo.png",

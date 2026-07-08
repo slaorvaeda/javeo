@@ -12,7 +12,7 @@ export default function Footer() {
           <div className="space-y-6" data-aos="fade-up" data-aos-delay="0">
             <div className="space-y-4">
               <h3 className="font-serif text-sm font-bold tracking-wide text-foreground uppercase">
-                Join the Cosmira Circle
+                Join the Javeo Circle
               </h3>
               <p className="text-xs text-muted-brand leading-relaxed max-w-xs font-sans">
                 Receive personalized skin tips, product updates, and early access to sales directly in your inbox.
@@ -163,7 +163,7 @@ export default function Footer() {
           <div className="relative w-[70%] aspect-[5/1] max-w-[700px]">
             <Image
               src="/logo.png"
-              alt="Cosmira Skincare Brand logo"
+              alt="Javeo Brand logo"
               fill
               sizes="70vw"
               className="object-contain"
@@ -174,9 +174,9 @@ export default function Footer() {
         {/* Copyright info */}
         <div className="mt-12 border-t border-border-brand/20 pt-8 flex flex-col md:flex-row md:items-center md:justify-between" data-aos="fade-up" data-aos-delay="300">
           <p className="text-[10px] text-muted-brand">
-            &copy; {new Date().getFullYear()} Cosmira Skincare Inc. All rights reserved.
+            &copy; {new Date().getFullYear()} Javeo.in. All rights reserved.
           </p>
-          
+
         </div>
       </div>
     </footer>

@@ -31,7 +31,7 @@ export default function Hero() {
         >
           <Image
             src={src}
-            alt={`Cosmira Skincare Hero Banner ${idx + 1}`}
+            alt={`Javeo Hero Banner ${idx + 1}`}
             fill
             priority={idx === 0}
             sizes="100vw"

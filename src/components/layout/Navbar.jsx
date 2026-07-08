@@ -161,7 +161,7 @@ export default function Navbar() {
             <Link href="/" className="relative flex items-center justify-center w-[160px] h-[50px] transition-transform duration-300 hover:scale-[1.02]">
               <Image
                 src="/logo.png"
-                alt="Cosmira Skincare Logo"
+                alt="Javeo Logo"
                 fill
                 priority
                 sizes="160px"
