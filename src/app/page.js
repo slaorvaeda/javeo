@@ -3,6 +3,7 @@ import Hero from "@/components/home/Hero";
 import CategorySection from "@/components/home/CategorySection";
 import ProductSection from "@/components/home/ProductSection";
 import RetinoidSection from "@/components/home/RetinoidSection";
+import CleanPromise from "@/components/home/CleanPromise";
 import QuizBanner from "@/components/home/QuizBanner";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       <CategorySection />
       <ProductSection />
       <RetinoidSection />
+      <CleanPromise />
       <QuizBanner />
     </>
   );
