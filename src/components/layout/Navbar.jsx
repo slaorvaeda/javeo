@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const MEGAMENU_COLUMNS = [
   {
@@ -60,6 +61,26 @@ export default function Navbar() {
   const [dropdownOpen, setDropdownOpen] = useState(false);
   const [mobileCatalogOpen, setMobileCatalogOpen] = useState(false);
   const [mobileCatalogSection, setMobileCatalogSection] = useState("");
+
+  const router = useRouter();
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const searchInputRef = useRef(null);
+
+  // Focus search input when opened
+  useEffect(() => {
+    if (searchOpen && searchInputRef.current) {
+      searchInputRef.current.focus();
+    }
+  }, [searchOpen]);
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (!searchQuery.trim()) return;
+    router.push(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+    setSearchOpen(false);
+    setSearchQuery("");
+  };
 
   // Handle scroll event to change styling slightly (optional premium feel)
   useEffect(() => {
@@ -171,16 +192,16 @@ export default function Navbar() {
           </div>
 
           {/* Right section: Icons (Desktop & Mobile) */}
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-3 sm:space-x-6">
             {/* Account Icon */}
-            <Link href="#account" className="text-foreground hover:text-[#b38f5f] transition-colors duration-300" aria-label="Account">
+            <Link href="#account" className="hidden sm:block text-foreground hover:text-[#b38f5f] transition-colors duration-300" aria-label="Account">
               <svg className="h-[22px] w-[22px] stroke-[1.25]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" />
               </svg>
             </Link>
 
             {/* Wishlist Heart Icon */}
-            <Link href="/wishlist" className="relative text-foreground hover:text-[#b38f5f] transition-colors duration-300" aria-label="Wishlist">
+            <Link href="/wishlist" className="hidden sm:block relative text-foreground hover:text-[#b38f5f] transition-colors duration-300" aria-label="Wishlist">
               <svg className="h-[22px] w-[22px] stroke-[1.25]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
               </svg>
@@ -192,7 +213,14 @@ export default function Navbar() {
             </Link>
 
             {/* Search Icon */}
-            <button className="text-foreground hover:text-[#b38f5f] transition-colors duration-300 focus:outline-none cursor-pointer" aria-label="Search">
+            <button 
+              onClick={() => {
+                setSearchOpen(!searchOpen);
+                setDropdownOpen(false);
+              }}
+              className={`transition-colors duration-300 focus:outline-none cursor-pointer ${searchOpen ? "text-[#b38f5f]" : "text-foreground hover:text-[#b38f5f]"}`} 
+              aria-label="Search"
+            >
               <svg className="h-[22px] w-[22px] stroke-[1.25]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
               </svg>
@@ -215,8 +243,8 @@ export default function Navbar() {
 
       {/* Mobile Menu Drawer */}
       <div
-        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-60 border-t border-border-brand" : "max-h-0"
+        className={`md:hidden overflow-y-auto transition-all duration-500 ease-in-out ${
+          isOpen ? "max-h-[85vh] border-t border-border-brand/40 pb-6" : "max-h-0"
         }`}
         id="mobile-menu"
       >
@@ -295,6 +323,13 @@ export default function Navbar() {
               </span>
             )}
           </Link>
+          <Link
+            href="#account"
+            onClick={() => setIsOpen(false)}
+            className="block rounded-md px-3 py-2 text-foreground hover:bg-neutral-50"
+          >
+            Account
+          </Link>
         </div>
       </div>
 
@@ -363,6 +398,44 @@ export default function Navbar() {
                  </ul>
                </div>
              ))}
+          </div>
+        </div>
+      )}
+      {/* Full-width Search Overlay Container */}
+      {searchOpen && (
+        <div 
+          className="absolute top-full left-0 right-0 w-full bg-white border-b border-border-brand/20 shadow-xl py-6 z-40 transition-all duration-300 animate-slideDown"
+        >
+          <div className="max-w-3xl mx-auto px-6 sm:px-8">
+            <form onSubmit={handleSearchSubmit} className="relative flex items-center gap-3 border-b border-border-brand/50 py-3">
+              <svg className="h-5 w-5 text-neutral-400 stroke-[1.5]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+              </svg>
+              <input
+                ref={searchInputRef}
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search products, ingredients, concerns..."
+                className="w-full bg-transparent border-none outline-none text-base text-foreground placeholder-neutral-400 font-sans tracking-wide"
+              />
+              <button 
+                type="button"
+                onClick={() => setSearchOpen(false)}
+                className="text-neutral-400 hover:text-foreground cursor-pointer focus:outline-none"
+                aria-label="Close search"
+              >
+                <svg className="h-5 w-5 stroke-[2]" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </form>
+            <div className="flex gap-4 mt-3 text-[10px] text-muted-brand font-bold uppercase tracking-widest font-sans">
+              <span>Trending:</span>
+              <button type="button" onClick={() => setSearchQuery("serum")} className="hover:text-primary-brand transition-colors cursor-pointer">Serum</button>
+              <button type="button" onClick={() => setSearchQuery("cleanser")} className="hover:text-primary-brand transition-colors cursor-pointer">Cleanser</button>
+              <button type="button" onClick={() => setSearchQuery("wrinkle")} className="hover:text-primary-brand transition-colors cursor-pointer">Anti-Aging</button>
+            </div>
           </div>
         </div>
       )}

@@ -121,28 +121,37 @@ const CATEGORIES = ["All Products", "Cleansers", "Serums & Oils", "Moisturizers"
 function ShopContent() {
   const [selectedCategory, setSelectedCategory] = useState("All Products");
   const [selectedConcern, setSelectedConcern] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState("featured");
 
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("category");
   const concernParam = searchParams.get("concern");
+  const searchParam = searchParams.get("search");
 
-  // Sync state with URL parameters (category & concerns)
+  // Sync state with URL parameters (category, concerns & search query)
   useEffect(() => {
     const timer = setTimeout(() => {
       if (categoryParam && CATEGORIES.includes(categoryParam)) {
         setSelectedCategory(categoryParam);
         setSelectedConcern("");
+        setSearchQuery("");
       } else if (concernParam) {
         setSelectedConcern(concernParam);
         setSelectedCategory("All Products");
+        setSearchQuery("");
+      } else if (searchParam) {
+        setSearchQuery(searchParam);
+        setSelectedCategory("All Products");
+        setSelectedConcern("");
       } else {
         setSelectedCategory("All Products");
         setSelectedConcern("");
+        setSearchQuery("");
       }
     }, 0);
     return () => clearTimeout(timer);
-  }, [categoryParam, concernParam]);
+  }, [categoryParam, concernParam, searchParam]);
 
   // Handle Add to Cart action
   const handleAddToCart = (id) => {
@@ -173,6 +182,16 @@ function ShopContent() {
       );
     }
 
+    // 1c. Filter by text search query
+    if (searchQuery) {
+      const q = searchQuery.toLowerCase();
+      result = result.filter((p) => 
+        p.name.toLowerCase().includes(q) || 
+        p.description.toLowerCase().includes(q) ||
+        p.category.toLowerCase().includes(q)
+      );
+    }
+
     // 2. Sort products
     if (sortBy === "price-low") {
       result.sort((a, b) => a.price - b.price);
@@ -183,7 +202,7 @@ function ShopContent() {
     }
 
     return result;
-  }, [selectedCategory, selectedConcern, sortBy]);
+  }, [selectedCategory, selectedConcern, searchQuery, sortBy]);
 
   return (
     <div className="bg-white min-h-screen p-16">
@@ -204,6 +223,11 @@ function ShopContent() {
               Concern active: {selectedConcern.replace("-", " ")}
             </p>
           )}
+          {searchQuery && (
+            <p className="text-xs text-primary-brand font-bold font-sans mt-2.5 uppercase tracking-widest">
+              Search results for: "{searchQuery}"
+            </p>
+          )}
           <p className="text-xs text-muted-brand font-sans mt-3 max-w-md">
             Explore our curated catalog of clean, clinical formulas designed to hydrate, balance, and rejuvenate your skin barrier.
           </p>
@@ -220,8 +244,9 @@ function ShopContent() {
                 onClick={() => {
                   setSelectedCategory(cat);
                   setSelectedConcern("");
+                  setSearchQuery("");
                 }}
-                className={`text-xs font-semibold px-4 py-2.5 rounded-full border transition-all duration-300 whitespace-nowrap cursor-pointer ${selectedCategory === cat && !selectedConcern
+                className={`text-xs font-semibold px-4 py-2.5 rounded-full border transition-all duration-300 whitespace-nowrap cursor-pointer ${selectedCategory === cat && !selectedConcern && !searchQuery
                     ? "bg-foreground text-background border-foreground shadow-sm"
                     : "bg-[#f5f5f3] text-muted-brand border-transparent hover:border-neutral-300"
                   }`}
