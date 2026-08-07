@@ -1,6 +1,6 @@
 "use client";
 
-import React, { use, useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import ProductCard from "@/components/ui/ProductCard";
@@ -162,9 +162,8 @@ const formatRichText = (str) => {
     .replace(/__(.*?)__/g, '<u>$1</u>');
 };
 
-export default function ProductDetailsClient({ params }) {
-  const resolvedParams = use(params);
-  const productId = parseInt(resolvedParams.id);
+export default function ProductDetailsClient({ id }) {
+  const productId = parseInt(id);
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -193,14 +192,20 @@ export default function ProductDetailsClient({ params }) {
           initial[opt.name] = opt.values[0];
         }
       });
-      setSelectedOptions(initial);
+      const timer = setTimeout(() => {
+        setSelectedOptions(initial);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [product]);
 
   // Sync main image when variant image changes
   useEffect(() => {
     if (matchedVariant && matchedVariant.imageUrl) {
-      setSelectedImage(matchedVariant.imageUrl);
+      const timer = setTimeout(() => {
+        setSelectedImage(matchedVariant.imageUrl);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [matchedVariant]);
 
@@ -209,11 +214,16 @@ export default function ProductDetailsClient({ params }) {
     if (product) {
       const directionsVis = product.metadata?.showDirections !== false;
       const ingredientsVis = product.metadata?.showIngredients !== false;
+      let targetTab = "description";
       if (!directionsVis && ingredientsVis) {
-        setActiveTab("ingredients");
+        targetTab = "ingredients";
       } else if (directionsVis) {
-        setActiveTab("description");
+        targetTab = "description";
       }
+      const timer = setTimeout(() => {
+        setActiveTab(targetTab);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [product]);
 
@@ -223,7 +233,7 @@ export default function ProductDetailsClient({ params }) {
       try {
         setLoading(true);
         const body = await api.get(`/products/${productId}`);
-        
+
         if (body.success && body.data) {
           setProduct(body.data);
           setSelectedImage(body.data.imageUrl);
@@ -258,7 +268,10 @@ export default function ProductDetailsClient({ params }) {
 
   useEffect(() => {
     if (sizes.length > 0) {
-      setSelectedSize(sizes[0]);
+      const timer = setTimeout(() => {
+        setSelectedSize(sizes[0]);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [sizes]);
 
@@ -337,7 +350,7 @@ export default function ProductDetailsClient({ params }) {
   return (
     <div className="bg-white min-h-screen pt-8 pb-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        
+
         {/* Breadcrumbs */}
         <nav className="flex text-xs text-muted-brand font-sans tracking-wide mb-8 uppercase">
           <Link href="/" className="hover:text-primary-brand transition-colors">Home</Link>
@@ -349,7 +362,7 @@ export default function ProductDetailsClient({ params }) {
 
         {/* Core Product Columns */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start mb-24">
-          
+
           {/* Left Column (Product Image Frame + Thumbnails Grid) */}
           <div className="lg:col-span-6 w-full flex flex-col" data-aos="fade-right">
             <div className="relative aspect-[4/3.8] w-full overflow-hidden rounded-[2.25rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] border border-border-brand/40 shadow-sm">
@@ -361,7 +374,7 @@ export default function ProductDetailsClient({ params }) {
                 sizes="(max-width: 1024px) 100vw, 50vw"
                 className="object-cover object-center scale-[0.95] rounded-2xl transition-transform duration-500 ease-in-out hover:scale-[1.05] cursor-pointer"
               />
-              
+
               {/* Product Badge */}
               {product.badge && (
                 <span className="absolute top-6 left-6 z-10 bg-[#16a34a] text-white text-[10px] font-semibold tracking-wider px-3.5 py-1.5 rounded-full shadow-sm uppercase">
@@ -378,11 +391,10 @@ export default function ProductDetailsClient({ params }) {
                     key={i}
                     type="button"
                     onClick={() => setSelectedImage(img)}
-                    className={`relative h-16 w-16 sm:h-20 sm:w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer ${
-                      selectedImage === img ? 'border-[#1a1a1a] scale-102 shadow-sm' : 'border-zinc-200 hover:border-zinc-400'
-                    }`}
+                    className={`relative h-16 w-16 sm:h-20 sm:w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer ${selectedImage === img ? 'border-[#1a1a1a] scale-102 shadow-sm' : 'border-zinc-200 hover:border-zinc-400'
+                      }`}
                   >
-                    <Image src={img} alt={`Thumbnail ${i+1}`} fill className="object-cover" />
+                    <Image src={img} alt={`Thumbnail ${i + 1}`} fill className="object-cover" />
                   </button>
                 ))}
               </div>
@@ -391,7 +403,7 @@ export default function ProductDetailsClient({ params }) {
 
           {/* Right Column (Product Details & Purchasing Panel) */}
           <div className="lg:col-span-6 w-full flex flex-col" data-aos="fade-left">
-            
+
             {/* Category and Rating */}
             <div className="flex items-center gap-4 mb-3">
               <span className="text-xs font-bold text-primary-brand tracking-widest uppercase font-sans">
@@ -417,7 +429,7 @@ export default function ProductDetailsClient({ params }) {
             </div>
 
             {/* Catalog Description */}
-            <div 
+            <div
               className="text-sm text-muted-brand leading-relaxed mb-8 font-sans whitespace-pre-line"
               dangerouslySetInnerHTML={{ __html: formatRichText(product.description) }}
             />
@@ -435,11 +447,10 @@ export default function ProductDetailsClient({ params }) {
                       <button
                         key={val}
                         onClick={() => setSelectedOptions(prev => ({ ...prev, [opt.name]: val }))}
-                        className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider font-sans transition-all duration-300 cursor-pointer ${
-                          isSelected
+                        className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider font-sans transition-all duration-300 cursor-pointer ${isSelected
                             ? "bg-[#1a1a1a] text-white shadow-sm"
                             : "bg-white border border-border-brand text-muted-brand hover:border-foreground hover:text-foreground"
-                        }`}
+                          }`}
                       >
                         {val}
                       </button>
@@ -460,11 +471,10 @@ export default function ProductDetailsClient({ params }) {
                     <button
                       key={sz}
                       onClick={() => setSelectedSize(sz)}
-                      className={`px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider font-sans transition-all duration-300 cursor-pointer ${
-                        selectedSize === sz
+                      className={`px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider font-sans transition-all duration-300 cursor-pointer ${selectedSize === sz
                           ? "bg-[#1a1a1a] text-white shadow-sm"
                           : "bg-white border border-border-brand text-muted-brand hover:border-foreground hover:text-foreground"
-                      }`}
+                        }`}
                     >
                       {sz}
                     </button>
@@ -475,7 +485,7 @@ export default function ProductDetailsClient({ params }) {
 
             {/* Purchase CTA buttons */}
             <div className="flex gap-4 mb-8 border-y border-border-brand/20 py-6">
-              
+
               {/* Add to Cart button */}
               {product.metadata?.isActive === false ? (
                 <button
@@ -501,9 +511,8 @@ export default function ProductDetailsClient({ params }) {
                 aria-label="Add to wishlist"
               >
                 <svg
-                  className={`h-5 w-5 transition-colors duration-300 ${
-                    liked ? "fill-red-500 stroke-red-500" : "fill-none stroke-neutral-500"
-                  }`}
+                  className={`h-5 w-5 transition-colors duration-300 ${liked ? "fill-red-500 stroke-red-500" : "fill-none stroke-neutral-500"
+                    }`}
                   viewBox="0 0 24 24"
                   strokeWidth="2"
                 >
@@ -520,23 +529,21 @@ export default function ProductDetailsClient({ params }) {
             {/* Interactive Details Accordion/Tabs */}
             {product && (product.metadata?.showDirections !== false || product.metadata?.showIngredients !== false) && (
               <div className="border-b border-border-brand/20 pb-4">
-                
+
                 {/* Tabs Navbar headers - Only show if both are active */}
                 {product.metadata?.showDirections !== false && product.metadata?.showIngredients !== false && (
                   <div className="flex border-b border-border-brand/10 text-xs font-semibold uppercase tracking-wider text-muted-brand font-sans">
                     <button
                       onClick={() => setActiveTab("description")}
-                      className={`pb-3 pr-6 border-b-2 transition-all cursor-pointer ${
-                        activeTab === "description" ? "border-foreground text-foreground" : "border-transparent hover:text-foreground"
-                      }`}
+                      className={`pb-3 pr-6 border-b-2 transition-all cursor-pointer ${activeTab === "description" ? "border-foreground text-foreground" : "border-transparent hover:text-foreground"
+                        }`}
                     >
                       How To Use
                     </button>
                     <button
                       onClick={() => setActiveTab("ingredients")}
-                      className={`pb-3 px-6 border-b-2 transition-all cursor-pointer ${
-                        activeTab === "ingredients" ? "border-foreground text-foreground" : "border-transparent hover:text-foreground"
-                      }`}
+                      className={`pb-3 px-6 border-b-2 transition-all cursor-pointer ${activeTab === "ingredients" ? "border-foreground text-foreground" : "border-transparent hover:text-foreground"
+                        }`}
                     >
                       Ingredients
                     </button>
@@ -546,17 +553,17 @@ export default function ProductDetailsClient({ params }) {
                 {/* Dynamic Tabs content */}
                 <div className="pt-4 min-h-[100px] text-xs sm:text-sm text-muted-brand leading-relaxed font-sans whitespace-pre-line">
                   {activeTab === "description" && product.metadata?.showDirections !== false ? (
-                    <div 
-                      dangerouslySetInnerHTML={{ 
-                        __html: formatRichText(product.directions || product.metadata?.directions || "Apply onto clean face and neck. Gently massage until fully absorbed.") 
-                      }} 
+                    <div
+                      dangerouslySetInnerHTML={{
+                        __html: formatRichText(product.directions || product.metadata?.directions || "Apply onto clean face and neck. Gently massage until fully absorbed.")
+                      }}
                     />
                   ) : (
                     product.metadata?.showIngredients !== false && (
-                      <div 
-                        dangerouslySetInnerHTML={{ 
-                          __html: formatRichText(product.ingredients || product.metadata?.ingredients || "Please consult product cover label for direct active ingredients details.") 
-                        }} 
+                      <div
+                        dangerouslySetInnerHTML={{
+                          __html: formatRichText(product.ingredients || product.metadata?.ingredients || "Please consult product cover label for direct active ingredients details.")
+                        }}
                       />
                     )
                   )}
@@ -580,7 +587,7 @@ export default function ProductDetailsClient({ params }) {
           <h2 className="font-serif text-3xl font-bold tracking-tight text-foreground mb-12">
             Recommended For You
           </h2>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {recommendations.map((rec) => (
               <div key={rec.id} className="w-full" data-aos="fade-up">

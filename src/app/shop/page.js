@@ -249,7 +249,7 @@ function ShopContent() {
           )}
           {searchQuery && (
             <p className="text-xs text-primary-brand font-bold font-sans mt-2.5 uppercase tracking-widest">
-              Search results for: "{searchQuery}"
+              Search results for: &quot;{searchQuery}&quot;
             </p>
           )}
           <p className="text-xs text-muted-brand font-sans mt-3 max-w-md">
