@@ -1,0 +1,47 @@
+name: Deploy Frontend to BigRock
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install NPM Dependencies & Build Assets
+        run: |
+          npm ci || npm install
+          npm run build
+        env:
+          NEXT_PUBLIC_API_URL: 'https://api.clickkarte.com/api'
+
+      - name: Package Static Exports
+        run: |
+          cd out && zip -r ../build.zip .
+
+      - name: Setup SSH Configuration
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.BIGROCK_SSH_KEY }}" > ~/.ssh/id_ed25519
+          chmod 600 ~/.ssh/id_ed25519
+          ssh-keyscan -H 66.116.229.214 >> ~/.ssh/known_hosts
+
+      - name: Upload Build Package
+        run: |
+          scp -i ~/.ssh/id_ed25519 build.zip a178473e@66.116.229.214:~/javeo.in/build.zip
+
+      - name: Extract Build on Server
+        run: |
+          ssh -i ~/.ssh/id_ed25519 a178473e@66.116.229.214 "unzip -o ~/javeo.in/build.zip -d ~/javeo.in/ && rm -f ~/javeo.in/build.zip"
