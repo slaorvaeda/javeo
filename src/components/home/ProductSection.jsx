@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import ProductCard from "../ui/ProductCard";
+import api from "@/utils/api";
 
 const PRODUCTS = [
   {
@@ -62,10 +63,24 @@ const PRODUCTS = [
 
 export default function ProductSection() {
   const sliderRef = useRef(null);
+  const [productsList, setProductsList] = useState(PRODUCTS);
+
+  useEffect(() => {
+    api.get("/products?storeId=javeo-store-uuid-3333-4444")
+      .then((body) => {
+        if (body.success && Array.isArray(body.data) && body.data.length > 0) {
+          const activeProducts = body.data.filter((p) => p.metadata?.isActive !== false);
+          setProductsList(activeProducts);
+        }
+      })
+      .catch((err) => console.error("Failed to load products from API:", err));
+  }, []);
 
   const handleAddToCart = (id) => {
-    const product = PRODUCTS.find((p) => p.id === id);
-    alert(`Added "${product.name}" to cart!`);
+    const product = productsList.find((p) => p.id === id);
+    if (product) {
+      alert(`Added "${product.name}" to cart!`);
+    }
   };
 
   const scrollLeft = () => {
@@ -124,7 +139,7 @@ export default function ProductSection() {
             ref={sliderRef}
             className="flex gap-6 overflow-x-auto snap-x snap-mandatory no-scrollbar scroll-smooth pb-4 px-0.5"
           >
-            {PRODUCTS.map((product, idx) => (
+            {productsList.map((product, idx) => (
               <div
                 key={product.id}
                 className="w-full sm:w-[calc((100%-24px)/2)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] xl:w-[calc((100%-96px)/5)] flex-shrink-0 snap-start"
@@ -135,8 +150,10 @@ export default function ProductSection() {
                   id={product.id}
                   name={product.name}
                   price={product.price}
+                  mrp={product.mrp}
                   imageUrl={product.imageUrl}
-                  badge={product.badge}
+                  images={product.metadata?.images || []}
+                  badge={product.badge || product.metadata?.badge || ""}
                   description={product.description}
                   onAddToCart={handleAddToCart}
                 />

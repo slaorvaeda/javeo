@@ -9,11 +9,36 @@ export default function ProductCard({
   name,
   description,
   price,
+  mrp,
   imageUrl,
+  secondaryImageUrl,
+  images = [],
   badge,
   onAddToCart,
 }) {
   const [liked, setLiked] = useState(false);
+
+  // Compute hover image
+  const getSecondaryImage = () => {
+    if (secondaryImageUrl) return secondaryImageUrl;
+    if (Array.isArray(images) && images.length > 1) return images[1];
+    if (Array.isArray(images) && images.length > 0) return images[0];
+    
+    // Fallback based on name keywords
+    const lowerName = name.toLowerCase();
+    if (lowerName.includes("serum") || lowerName.includes("oil") || lowerName.includes("fluid")) {
+      return "/category-face.png";
+    }
+    if (lowerName.includes("cream") || lowerName.includes("mask") || lowerName.includes("moisturizer")) {
+      return "/category-body.png";
+    }
+    if (lowerName.includes("cleanser") || lowerName.includes("wash")) {
+      return "/category-essentials.png";
+    }
+    return "/category-hair.png";
+  };
+
+  const hoverImg = getSecondaryImage();
 
   // Sync liked state with localStorage
   useEffect(() => {
@@ -50,14 +75,24 @@ export default function ProductCard({
       {/* Image container wrapped in Link */}
       <Link 
         href={`/products/${id}`} 
-        className="relative aspect-square w-full overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] cursor-pointer"
+        className="relative aspect-square w-full overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] cursor-pointer block"
       >
+        {/* Primary Image */}
         <Image
           src={imageUrl || "/logo.png"}
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+          className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-0"
+        />
+
+        {/* Secondary Hover Image */}
+        <Image
+          src={hoverImg}
+          alt={`${name} Texture`}
+          fill
+          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+          className="object-cover object-center absolute inset-0 w-full h-full opacity-0 scale-95 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
         />
 
         {/* Badge (Trending/Best Seller/New) */}
@@ -104,9 +139,16 @@ export default function ProductCard({
 
         {/* Bottom bar with price and Add to Cart button */}
         <div className="mt-auto flex items-center justify-between">
-          <span className="text-base font-bold text-foreground">
-            ₹{parseFloat(price).toLocaleString("en-IN")}
-          </span>
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5">
+            <span className="text-base font-bold text-foreground">
+              ₹{parseFloat(price).toLocaleString("en-IN")}
+            </span>
+            {mrp && parseFloat(mrp) > parseFloat(price) && (
+              <span className="text-xs text-neutral-400 line-through font-normal">
+                ₹{parseFloat(mrp).toLocaleString("en-IN")}
+              </span>
+            )}
+          </div>
           <button
             onClick={() => onAddToCart && onAddToCart(id)}
             className="bg-[#1a1a1a] hover:bg-primary-brand text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 shadow-sm cursor-pointer"

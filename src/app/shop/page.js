@@ -4,6 +4,7 @@ import React, { useState, useMemo, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ui/ProductCard";
+import api from "@/utils/api";
 
 const SHOP_PRODUCTS = [
   {
@@ -119,6 +120,8 @@ const SHOP_PRODUCTS = [
 const CATEGORIES = ["All Products", "Cleansers", "Serums & Oils", "Moisturizers", "Treatments"];
 
 function ShopContent() {
+  const [productsList, setProductsList] = useState(SHOP_PRODUCTS);
+  const [categoriesList, setCategoriesList] = useState(CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState("All Products");
   const [selectedConcern, setSelectedConcern] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -129,10 +132,31 @@ function ShopContent() {
   const concernParam = searchParams.get("concern");
   const searchParam = searchParams.get("search");
 
-  // Sync state with URL parameters (category, concerns & search query)
+  // Fetch dynamic products and categories on mount
+  useEffect(() => {
+    api.get("/products?storeId=javeo-store-uuid-3333-4444")
+      .then((body) => {
+        if (body.success && Array.isArray(body.data) && body.data.length > 0) {
+          const activeProducts = body.data.filter((p) => p.metadata?.isActive !== false);
+          setProductsList(activeProducts);
+        }
+      })
+      .catch((err) => console.error("Failed to load products from API:", err));
+
+    api.get("/categories?storeId=javeo-store-uuid-3333-4444")
+      .then((body) => {
+        if (body.success && Array.isArray(body.data) && body.data.length > 0) {
+          const names = body.data.map((c) => c.name);
+          setCategoriesList(["All Products", ...names]);
+        }
+      })
+      .catch((err) => console.error("Failed to load categories from API:", err));
+  }, []);
+
+  // Sync state with URL parameters
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (categoryParam && CATEGORIES.includes(categoryParam)) {
+      if (categoryParam && categoriesList.includes(categoryParam)) {
         setSelectedCategory(categoryParam);
         setSelectedConcern("");
         setSearchQuery("");
@@ -151,24 +175,26 @@ function ShopContent() {
       }
     }, 0);
     return () => clearTimeout(timer);
-  }, [categoryParam, concernParam, searchParam]);
+  }, [categoryParam, concernParam, searchParam, categoriesList]);
 
   // Handle Add to Cart action
   const handleAddToCart = (id) => {
-    const product = SHOP_PRODUCTS.find((p) => p.id === id);
-    alert(`Added "${product.name}" to cart!`);
+    const product = productsList.find((p) => p.id === id);
+    if (product) {
+      alert(`Added "${product.name}" to cart!`);
+    }
   };
 
   // Filter and sort products dynamically
   const filteredAndSortedProducts = useMemo(() => {
-    let result = [...SHOP_PRODUCTS];
+    let result = [...productsList];
 
     // 1. Filter by category
     if (selectedCategory !== "All Products") {
       result = result.filter((p) => p.category === selectedCategory);
     }
 
-    // 1b. Filter by concern (intelligent text mapping)
+    // 1b. Filter by concern
     if (selectedConcern) {
       const query = selectedConcern.toLowerCase();
       let filterQuery = query;
@@ -182,13 +208,13 @@ function ShopContent() {
       );
     }
 
-    // 1c. Filter by text search query
+    // 1c. Filter by search query
     if (searchQuery) {
-      const q = searchQuery.toLowerCase();
+      const query = searchQuery.toLowerCase();
       result = result.filter((p) => 
-        p.name.toLowerCase().includes(q) || 
-        p.description.toLowerCase().includes(q) ||
-        p.category.toLowerCase().includes(q)
+        p.name.toLowerCase().includes(query) || 
+        p.description.toLowerCase().includes(query) || 
+        p.category.toLowerCase().includes(query)
       );
     }
 
@@ -202,20 +228,18 @@ function ShopContent() {
     }
 
     return result;
-  }, [selectedCategory, selectedConcern, searchQuery, sortBy]);
+  }, [productsList, selectedCategory, selectedConcern, searchQuery, sortBy]);
 
   return (
-    <div className="bg-white min-h-screen p-16">
+    <div className="bg-white min-h-screen pt-8 pb-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-
-        {/* Breadcrumbs & Header */}
-        <div className="border-b border-border-brand/40 pb-8 mb-10">
-          <nav className="flex text-xs text-muted-brand font-sans tracking-wide mb-3 uppercase">
-            <Link href="/" className="hover:text-primary-brand transition-colors">Home</Link>
-            <span className="mx-2 text-neutral-300">/</span>
-            <span className="text-foreground">Shop</span>
-          </nav>
-          <h1 className="font-serif text-4xl sm:text-5xl font-bold tracking-tight text-foreground">
+        
+        {/* Page Header */}
+        <div className="mb-10" data-aos="fade-up" suppressHydrationWarning={true}>
+          <span className="text-[10px] font-bold text-muted-brand tracking-widest uppercase font-sans">
+            Clinically Proven Skincare
+          </span>
+          <h1 className="font-serif text-4xl font-bold tracking-tight text-foreground mt-2">
             Shop All Products
           </h1>
           {selectedConcern && (
@@ -238,7 +262,7 @@ function ShopContent() {
 
           {/* Category Tabs */}
           <div className="flex gap-2 overflow-x-auto no-scrollbar py-1">
-            {CATEGORIES.map((cat) => (
+            {categoriesList.map((cat) => (
               <button
                 key={cat}
                 onClick={() => {
@@ -247,7 +271,7 @@ function ShopContent() {
                   setSearchQuery("");
                 }}
                 className={`text-xs font-semibold px-4 py-2.5 rounded-full border transition-all duration-300 whitespace-nowrap cursor-pointer ${selectedCategory === cat && !selectedConcern && !searchQuery
-                    ? "bg-foreground text-background border-foreground shadow-sm"
+                    ? "bg-[#1a1a1a] text-white border-transparent shadow-sm"
                     : "bg-[#f5f5f3] text-muted-brand border-transparent hover:border-neutral-300"
                   }`}
               >
@@ -273,26 +297,24 @@ function ShopContent() {
 
         </div>
 
-        {/* Results Counter */}
-        <div className="text-xs text-muted-brand font-sans mb-8">
-          Showing {filteredAndSortedProducts.length} of {SHOP_PRODUCTS.length} products
-        </div>
-
         {/* Products Grid */}
         {filteredAndSortedProducts.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-6 gap-y-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
             {filteredAndSortedProducts.map((product) => (
               <div
                 key={product.id}
-                className="w-full"
+                className="w-full animate-in fade-in duration-250"
                 data-aos="fade-up"
+                suppressHydrationWarning={true}
               >
                 <ProductCard
                   id={product.id}
                   name={product.name}
                   price={product.price}
+                  mrp={product.mrp}
                   imageUrl={product.imageUrl}
-                  badge={product.badge}
+                  images={product.metadata?.images || []}
+                  badge={product.badge || product.metadata?.badge || ""}
                   description={product.description}
                   onAddToCart={handleAddToCart}
                 />
@@ -300,9 +322,9 @@ function ShopContent() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 border border-dashed border-border-brand/40 rounded-3xl">
+          <div className="text-center py-20 bg-[#f5f5f3]/40 rounded-[2.5rem] border border-dashed border-border-brand/40">
             <h3 className="font-serif text-lg font-bold text-foreground">No products found</h3>
-            <p className="text-xs text-muted-brand mt-2">Try clearing your category filter to see all results.</p>
+            <p className="text-xs text-muted-brand mt-1">Try relaxing your search query or filter tags to find formulas.</p>
           </div>
         )}
 
@@ -313,7 +335,11 @@ function ShopContent() {
 
 export default function ShopPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen pt-28 text-center text-xs text-muted-brand">Loading Catalog...</div>}>
+    <Suspense fallback={
+      <div className="min-h-screen flex items-center justify-center bg-white py-32">
+        <div className="h-8 w-8 border-4 border-indigo-650 border-t-transparent rounded-full animate-spin" />
+      </div>
+    }>
       <ShopContent />
     </Suspense>
   );
