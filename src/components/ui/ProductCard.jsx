@@ -27,15 +27,15 @@ export default function ProductCard({
     // Fallback based on name keywords
     const lowerName = name.toLowerCase();
     if (lowerName.includes("serum") || lowerName.includes("oil") || lowerName.includes("fluid")) {
-      return "/category-face.png";
+      return "/category-face.webp";
     }
     if (lowerName.includes("cream") || lowerName.includes("mask") || lowerName.includes("moisturizer")) {
-      return "/category-body.png";
+      return "/category-body.webp";
     }
     if (lowerName.includes("cleanser") || lowerName.includes("wash")) {
-      return "/category-essentials.png";
+      return "/category-essentials.webp";
     }
-    return "/category-hair.png";
+    return "/category-hair.webp";
   };
 
   const hoverImg = getSecondaryImage();
@@ -79,7 +79,7 @@ export default function ProductCard({
       >
         {/* Primary Image */}
         <Image
-          src={imageUrl || "/logo.png"}
+          src={imageUrl || "/logo.webp"}
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"

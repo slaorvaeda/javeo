@@ -4,7 +4,7 @@ import ProductDetailsClient from "./ProductDetailsClient";
 export async function generateStaticParams() {
   const urls = [
     process.env.NEXT_PUBLIC_API_URL ? `${process.env.NEXT_PUBLIC_API_URL}/products?storeId=javeo-store-uuid-3333-4444` : null,
-    "http://localhost:5001/api/products?storeId=javeo-store-uuid-3333-4444",
+    "http://localhost:8085/api/products?storeId=javeo-store-uuid-3333-4444",
     "https://api.clickkarte.com/api/products?storeId=javeo-store-uuid-3333-4444"
   ].filter(Boolean);
 
@@ -25,8 +25,8 @@ export async function generateStaticParams() {
     }
   }
 
-  // Fallback range of IDs to prevent crashes on localhost dynamic IDs
-  return Array.from({ length: 50 }, (_, i) => ({
+  // Fallback range of IDs (1 to 500) to ensure all newly created product IDs pre-render
+  return Array.from({ length: 500 }, (_, i) => ({
     id: (i + 1).toString(),
   }));
 }

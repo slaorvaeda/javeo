@@ -41,7 +41,7 @@ export default function QuizBanner() {
           data-aos="fade-left"
         >
           <Image
-            src="/routine-banner.png"
+            src="/routine-banner.webp"
             alt="Hydra-Barrier Skincare Cream Jar resting on stones"
             fill
             priority

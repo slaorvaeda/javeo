@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ui/ProductCard";
 import api from "@/utils/api";
+import { ProductCardSkeleton } from "@/components/ui/Skeleton";
 
 const SHOP_PRODUCTS = [
   {
@@ -12,7 +13,7 @@ const SHOP_PRODUCTS = [
     name: "Radiance Gold Serum",
     category: "Serums & Oils",
     price: 2499,
-    imageUrl: "/serum.png",
+    imageUrl: "/serum.webp",
     badge: "Best Seller",
     description: "Infused with 24k gold flakes and botanical oils to restore moisture and leave a radiant, healthy glow.",
   },
@@ -21,7 +22,7 @@ const SHOP_PRODUCTS = [
     name: "Hydration Boost Fluid",
     category: "Serums & Oils",
     price: 1899,
-    imageUrl: "/serum.png",
+    imageUrl: "/serum.webp",
     badge: "Trending",
     description: "A lightweight, fast-absorbing fluid packed with hyaluronic acid for 24-hour deep hydration.",
   },
@@ -30,7 +31,7 @@ const SHOP_PRODUCTS = [
     name: "Revitalize Cream",
     category: "Moisturizers",
     price: 2999,
-    imageUrl: "/hero-banner.png",
+    imageUrl: "/hero-banner.webp",
     badge: "New",
     description: "Rich and velvety daily moisturizer formulated to smooth fine lines and improve skin elasticity.",
   },
@@ -39,7 +40,7 @@ const SHOP_PRODUCTS = [
     name: "Night Recovery Mask",
     category: "Moisturizers",
     price: 3299,
-    imageUrl: "/hero-banner.png",
+    imageUrl: "/hero-banner.webp",
     badge: "Limited",
     description: "An overnight sleeping mask that repairs skin barrier and locks in nutrients while you sleep.",
   },
@@ -48,7 +49,7 @@ const SHOP_PRODUCTS = [
     name: "Soothing Milk Cleanser",
     category: "Cleansers",
     price: 1499,
-    imageUrl: "/serum.png",
+    imageUrl: "/serum.webp",
     badge: "Best Seller",
     description: "Gentle daily cleanser that removes impurities while maintaining natural moisture barrier.",
   },
@@ -57,7 +58,7 @@ const SHOP_PRODUCTS = [
     name: "Restorative Eye Gel",
     category: "Treatments",
     price: 1799,
-    imageUrl: "/hero-banner.png",
+    imageUrl: "/hero-banner.webp",
     badge: "New",
     description: "Cooling eye gel formulated with peptide complexes to reduce puffiness and dark circles.",
   },
@@ -66,7 +67,7 @@ const SHOP_PRODUCTS = [
     name: "Vitamin C Glow Drops",
     category: "Serums & Oils",
     price: 2199,
-    imageUrl: "/category-hair.png",
+    imageUrl: "/category-hair.webp",
     badge: "Best Seller",
     description: "Supercharged antioxidant cocktail to brighten complexions and boost collagen production.",
   },
@@ -75,7 +76,7 @@ const SHOP_PRODUCTS = [
     name: "Squalane Barrier Cream",
     category: "Moisturizers",
     price: 2499,
-    imageUrl: "/category-face.png",
+    imageUrl: "/category-face.webp",
     badge: "Trending",
     description: "Bio-identical emollient cream that repairs dry skin barrier and locks deep hydration.",
   },
@@ -84,7 +85,7 @@ const SHOP_PRODUCTS = [
     name: "Purifying Clay Cleanser",
     category: "Cleansers",
     price: 1299,
-    imageUrl: "/category-body.png",
+    imageUrl: "/category-body.webp",
     badge: "New",
     description: "Deeply cleanses pores, balances sebum production, and prevents breakouts without drying skin.",
   },
@@ -93,7 +94,7 @@ const SHOP_PRODUCTS = [
     name: "Brightening Treatment Toner",
     category: "Treatments",
     price: 1599,
-    imageUrl: "/serum.png",
+    imageUrl: "/serum.webp",
     badge: "New",
     description: "Exfoliating botanical treatment toner that clarifies, smooths texture, and balances pH.",
   },
@@ -102,7 +103,7 @@ const SHOP_PRODUCTS = [
     name: "Smoothing Peptide Serum",
     category: "Serums & Oils",
     price: 2799,
-    imageUrl: "/serum.png",
+    imageUrl: "/serum.webp",
     badge: "Trending",
     description: "Multi-peptide cellular serum designed to target wrinkles and restore facial elasticity.",
   },
@@ -111,7 +112,7 @@ const SHOP_PRODUCTS = [
     name: "Botanical Restoring Face Oil",
     category: "Serums & Oils",
     price: 3499,
-    imageUrl: "/category-hair.png",
+    imageUrl: "/category-hair.webp",
     badge: "Limited",
     description: "Luxurious pure cold-pressed botanical oils formulated to nourish dry, depleted skin barriers.",
   }
@@ -132,25 +133,35 @@ function ShopContent() {
   const concernParam = searchParams.get("concern");
   const searchParam = searchParams.get("search");
 
+  const [loading, setLoading] = useState(true);
+
   // Fetch dynamic products and categories on mount
   useEffect(() => {
-    api.get("/products?storeId=javeo-store-uuid-3333-4444")
-      .then((body) => {
+    const loadData = async () => {
+      try {
+        const body = await api.get("/products?storeId=javeo-store-uuid-3333-4444");
         if (body.success && Array.isArray(body.data) && body.data.length > 0) {
           const activeProducts = body.data.filter((p) => p.metadata?.isActive !== false);
           setProductsList(activeProducts);
         }
-      })
-      .catch((err) => console.error("Failed to load products from API:", err));
+      } catch (err) {
+        console.error("Failed to load products from API:", err);
+      }
 
-    api.get("/categories?storeId=javeo-store-uuid-3333-4444")
-      .then((body) => {
-        if (body.success && Array.isArray(body.data) && body.data.length > 0) {
-          const names = body.data.map((c) => c.name);
+      try {
+        const catBody = await api.get("/categories?storeId=javeo-store-uuid-3333-4444");
+        if (catBody.success && Array.isArray(catBody.data) && catBody.data.length > 0) {
+          const names = catBody.data.map((c) => c.name);
           setCategoriesList(["All Products", ...names]);
         }
-      })
-      .catch((err) => console.error("Failed to load categories from API:", err));
+      } catch (err) {
+        console.error("Failed to load categories from API:", err);
+      }
+      
+      setLoading(false);
+    };
+
+    loadData();
   }, []);
 
   // Sync state with URL parameters
@@ -298,7 +309,13 @@ function ShopContent() {
         </div>
 
         {/* Products Grid */}
-        {filteredAndSortedProducts.length > 0 ? (
+        {loading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <ProductCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : filteredAndSortedProducts.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-6 gap-y-12">
             {filteredAndSortedProducts.map((product) => (
               <div

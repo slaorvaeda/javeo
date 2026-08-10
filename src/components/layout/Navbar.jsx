@@ -181,7 +181,7 @@ export default function Navbar() {
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-shrink-0 items-center justify-center">
             <Link href="/" className="relative flex items-center justify-center w-[160px] h-[50px] transition-transform duration-300 hover:scale-[1.02]">
               <Image
-                src="/logo.png"
+                src="/logo.webp"
                 alt="Javeo Logo"
                 fill
                 priority
@@ -348,10 +348,10 @@ export default function Navbar() {
                </h4>
                <div className="space-y-4">
                  {[
-                   { name: "Cleansers", query: "Cleansers", image: "/category-face.png" },
-                   { name: "Serums & Oils", query: "Serums & Oils", image: "/category-hair.png" },
-                   { name: "Moisturizers", query: "Moisturizers", image: "/category-body.png" },
-                   { name: "Treatments", query: "Treatments", image: "/category-essentials.png" }
+                   { name: "Cleansers", query: "Cleansers", image: "/category-face.webp" },
+                   { name: "Serums & Oils", query: "Serums & Oils", image: "/category-hair.webp" },
+                   { name: "Moisturizers", query: "Moisturizers", image: "/category-body.webp" },
+                   { name: "Treatments", query: "Treatments", image: "/category-essentials.webp" }
                  ].map((cat) => (
                    <Link 
                      key={cat.name}

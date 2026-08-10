@@ -6,31 +6,31 @@ import Image from "next/image";
 const BADGES = [
   {
     title: "No Synthetic Fragrance",
-    imageUrl: "/badge-fragrance-free.png"
+    imageUrl: "/badge-fragrance-free.webp"
   },
   {
     title: "No Synthetic Formulas",
-    imageUrl: "/badge-clean-formula.png"
+    imageUrl: "/badge-clean-formula.webp"
   },
   {
     title: "Organic Botanicals",
-    imageUrl: "/badge-botanical-organic.png"
+    imageUrl: "/badge-botanical-organic.webp"
   },
   {
     title: "100% Natural",
-    imageUrl: "/badge-natural.png"
+    imageUrl: "/badge-natural.webp"
   },
   {
     title: "Cruelty Free & Vegan",
-    imageUrl: "/badge-vegan.png"
+    imageUrl: "/badge-vegan.webp"
   },
   {
     title: "Dermatologist Tested",
-    imageUrl: "/badge-dermatologist.png"
+    imageUrl: "/badge-dermatologist.webp"
   },
   {
     title: "Paraben & Sulfate Free",
-    imageUrl: "/badge-paraben-free.png"
+    imageUrl: "/badge-paraben-free.webp"
   }
 ];
 

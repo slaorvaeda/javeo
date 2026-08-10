@@ -162,7 +162,7 @@ export default function Footer() {
         <div className="pt-4 flex items-center justify-center border-t border-border-brand/20" data-aos="fade-up" data-aos-delay="200">
           <div className="relative w-[70%] aspect-[5/1] max-w-[700px]">
             <Image
-              src="/logo.png"
+              src="/logo.webp"
               alt="Javeo Brand logo"
               fill
               sizes="70vw"

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL || 'https://api.clickkarte.com/api' || 'http://localhost:5001/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8085/api' || 'https://api.clickkarte.com/api',
   headers: {
     'Content-Type': 'application/json',
   },

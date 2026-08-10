@@ -11,7 +11,7 @@ const PRODUCTS_DATA = [
     id: 1,
     heading: "Granactive Retinoid — The Future of Skincare Innovation",
     description: "Clinically backed ingredients designed for visible results and healthier skin.",
-    imageUrl: "/IMG_6768.png",
+    imageUrl: "/IMG_6768.webp",
     viewLink: "#retinoid-details",
     ingredients: [
       { title: "Peptides (3%)", desc: "Improves firmness, boosts elasticity, strengthens skin, enhances smooth youthful appearance." },
@@ -24,7 +24,7 @@ const PRODUCTS_DATA = [
     id: 2,
     heading: "Vitamin C Glow — Radiance & Dark Spot Correction",
     description: "Supercharged antioxidant cocktail to brighten complexions and boost collagen production.",
-    imageUrl: "/IMG_8296.png",
+    imageUrl: "/IMG_8296.webp",
     viewLink: "#vit-c-details",
     ingredients: [
       { title: "L-Ascorbic Acid (15%)", desc: "Neutralizes free radicals and brightens skin tone, fading dark spots and hyperpigmentation." },
@@ -37,7 +37,7 @@ const PRODUCTS_DATA = [
     id: 3,
     heading: "Squalane Barrier — Ultimate Skin Defense & Repair",
     description: "Rich lipid-replenishing formula to restore dry, compromised skin barriers.",
-    imageUrl: "/IMG_8273.png",
+    imageUrl: "/IMG_8273.webp",
     viewLink: "#squalane-details",
     ingredients: [
       { title: "Squalane (10%)", desc: "Bio-identical emollient that locks in moisture without clogging pores or leaving grease." },
@@ -50,7 +50,7 @@ const PRODUCTS_DATA = [
     id: 4,
     heading: "Luminous Milky Cleanser — Cleanse Without Stripping",
     description: "Hydrating milk emulsion that dissolves makeup and pollution while calming skin.",
-    imageUrl: "/IMG_8283.png",
+    imageUrl: "/IMG_8283.webp",
     viewLink: "#cleanser-details",
     ingredients: [
       { title: "Oat Beta-Glucan", desc: "Soothes dry/itchy inflammation and forms a weightless protective moisture veil." },

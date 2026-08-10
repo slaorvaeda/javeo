@@ -4,9 +4,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 
 const IMAGES = [
-  "/hero-banner2.png",
-  "/hero-banner3.png",
-  "/hero-banner5.png",
+  "/hero-banner2.webp",
+  "/hero-banner3.webp",
+  "/hero-banner5.webp",
 ];
 
 export default function Hero() {

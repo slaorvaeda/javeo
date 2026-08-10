@@ -1,3 +1,5 @@
+"use client";
+
 import React from "react";
 import Image from "next/image";
 import Link from "next/link";
@@ -5,31 +7,33 @@ import Link from "next/link";
 const CATEGORIES = [
   {
     label: "Body care",
-    imageUrl: "/category-body.png",
+    imageUrl: "/category-body.webp",
     link: "#body-care",
     objectFit: "object-contain p-4",
   },
   {
     label: "Face care",
-    imageUrl: "/category-face.png",
+    imageUrl: "/category-face.webp",
     link: "#face-care",
     objectFit: "object-contain p-4",
   },
   {
     label: "Hair care",
-    imageUrl: "/category-hair.png",
+    imageUrl: "/category-hair.webp",
     link: "#hair-care",
     objectFit: "object-contain p-4",
   },
   {
     label: "Essentials",
-    imageUrl: "/category-essentials.png",
+    imageUrl: "/category-essentials.webp",
     link: "#essentials",
     objectFit: "object-cover",
   },
 ];
 
 export default function CategorySection() {
+  const [loadedImages, setLoadedImages] = React.useState({});
+
   return (
     <section className="bg-white py-16 border-t border-border-brand/40">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -71,12 +75,17 @@ export default function CategorySection() {
 
               {/* Card Image Container */}
               <div className="flex-1 flex items-center justify-center relative overflow-hidden mt-1 rounded-[1.5rem]">
+                {/* Image loading skeleton overlay */}
+                {!loadedImages[idx] && (
+                  <div className="absolute inset-0 bg-neutral-200/80 animate-pulse rounded-[1.5rem]" />
+                )}
                 <Image
                   src={cat.imageUrl}
                   alt={`Shop ${cat.label.replace(/[()]/g, "")}`}
                   fill
                   sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                  className={`object-center transition-all duration-700 ease-out rounded-xl scale-130 group-hover:scale-[1.5] brightness-80 group-hover:brightness-100 ${cat.objectFit}`}
+                  onLoad={() => setLoadedImages(prev => ({ ...prev, [idx]: true }))}
+                  className={`object-center transition-all duration-700 ease-out rounded-xl scale-130 group-hover:scale-[1.5] brightness-80 group-hover:brightness-100 ${cat.objectFit} ${loadedImages[idx] ? 'opacity-100' : 'opacity-0'}`}
                 />
               </div>
             </Link>

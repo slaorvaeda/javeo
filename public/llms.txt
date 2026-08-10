@@ -1,0 +1,7 @@
+# Javeo Skincare
+
+> Curated catalog of clean, clinical Korean skincare formulas.
+
+## Key Routes
+- [/shop](https://javeo.in/shop) - Browse all skincare products, treatments, cleansers, and moisturizers.
+- [/wishlist](https://javeo.in/wishlist) - View saved favorite formulas.

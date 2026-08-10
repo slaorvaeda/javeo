@@ -7,8 +7,8 @@ export const metadata = {
   title: "Javeo | Premium Skincare Routines & Products",
   description: "Discover clean, dermatologist-tested, premium skincare formulations. Take our skin quiz to find your perfect daily routine.",
   icons: {
-    icon: "/logo.png",
-    apple: "/logo.png",
+    icon: "/logo.webp",
+    apple: "/logo.webp",
   },
 };
 
