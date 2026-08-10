@@ -74,7 +74,7 @@ export default function ProductCard({
       
       {/* Image container wrapped in Link */}
       <Link 
-        href={`/products/${id}`} 
+        href={`/products?id=${id}`} 
         className="relative aspect-square w-full overflow-hidden rounded-[1.75rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] cursor-pointer block"
       >
         {/* Primary Image */}
@@ -127,7 +127,7 @@ export default function ProductCard({
 
       {/* Details container */}
       <div className="flex flex-1 flex-col pt-5 px-1.5 pb-1">
-        <Link href={`/products/${id}`} className="hover:text-primary-brand transition-colors duration-300 cursor-pointer">
+        <Link href={`/products?id=${id}`} className="hover:text-primary-brand transition-colors duration-300 cursor-pointer">
           <h3 className="text-lg font-bold tracking-tight text-foreground mb-2 leading-snug line-clamp-1">
             {name}
           </h3>
