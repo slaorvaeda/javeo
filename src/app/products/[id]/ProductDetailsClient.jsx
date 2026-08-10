@@ -174,6 +174,7 @@ export default function ProductDetailsClient({ id }) {
   const [quantity, setQuantity] = useState(1);
   const [liked, setLiked] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({});
+  const [recommendedProducts, setRecommendedProducts] = useState([]);
 
   const matchedVariant = useMemo(() => {
     if (!product || !product.hasVariants || !product.variants) return null;
@@ -244,6 +245,17 @@ export default function ProductDetailsClient({ id }) {
           const fallback = PRODUCT_CATALOG.find(p => p.id.toString() === productId.toString());
           setProduct(fallback || null);
           setSelectedImage(fallback?.imageUrl || "");
+        }
+
+        // Fetch dynamic product recommendations from DB/API
+        try {
+          const listBody = await api.get('/products?storeId=javeo-store-uuid-3333-4444');
+          const listData = listBody?.data || [];
+          if (Array.isArray(listData) && listData.length > 0) {
+            setRecommendedProducts(listData);
+          }
+        } catch (listErr) {
+          console.warn('Failed to fetch recommendations list from API:', listErr);
         }
       } catch (err) {
         console.error('Failed to load from API, falling back to static catalog:', err);
@@ -316,13 +328,26 @@ export default function ProductDetailsClient({ id }) {
     }
   };
 
-  // Get recommended products (excluding current)
+  // Get recommended products (excluding current, sorted by category similarity)
   const recommendations = useMemo(() => {
     if (!product) return [];
-    return PRODUCT_CATALOG
-      .filter((p) => p.id !== product.id)
+    
+    // Choose data source (API products list or fallback to static catalog)
+    const baseList = recommendedProducts.length > 0 ? recommendedProducts : PRODUCT_CATALOG;
+    const cleanCurrentId = product.id.toString();
+
+    // Filter out the current product
+    const otherProducts = baseList.filter((p) => p.id.toString() !== cleanCurrentId);
+
+    // Sort: same category first for smarter recommendation logic
+    return otherProducts
+      .sort((a, b) => {
+        const aSame = a.category?.toLowerCase() === product.category?.toLowerCase() ? 1 : 0;
+        const bSame = b.category?.toLowerCase() === product.category?.toLowerCase() ? 1 : 0;
+        return bSame - aSame;
+      })
       .slice(0, 4);
-  }, [product]);
+  }, [product, recommendedProducts]);
 
   if (loading) {
     return <ProductDetailsSkeleton />;
