@@ -163,7 +163,7 @@ export default function ProductCard({
 
         {/* Quantity and Unit Label */}
         {quantityLabel && (
-          <span className="text-[11px] font-semibold text-muted-brand/80 mb-2 block font-sans">
+          <span className="text-[11px] font-semibold text-muted-brand/80 block font-sans">
             {quantityLabel}
           </span>
         )}
