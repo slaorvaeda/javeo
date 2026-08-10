@@ -125,13 +125,6 @@ export default function ProductCard({
             {badge}
           </span>
         )}
-
-        {/* Quantity Badge (bottom-left overlay) */}
-        {quantityLabel && (
-          <span className="absolute bottom-4 left-4 z-10 bg-white/90 backdrop-blur-xs text-neutral-800 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-2xs border border-neutral-200/40">
-            {quantityLabel}
-          </span>
-        )}
       </Link>
 
       {/* Heart/Like Button */}
@@ -167,6 +160,13 @@ export default function ProductCard({
         <p className="text-xs text-muted-brand leading-relaxed mb-5 font-sans line-clamp-2 min-h-[36px] sm:min-h-[40px]">
           {description}
         </p>
+
+        {/* Quantity and Unit Label */}
+        {quantityLabel && (
+          <span className="text-[11px] font-semibold text-muted-brand/80 mb-2 block font-sans">
+            {quantityLabel}
+          </span>
+        )}
 
         {/* Bottom bar with price and Add to Cart button */}
         <div className="mt-auto flex items-center justify-between">
