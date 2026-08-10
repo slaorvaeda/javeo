@@ -706,6 +706,10 @@ export default function ProductDetailsClient({ id }) {
                   badge={rec.badge}
                   description={rec.description}
                   onAddToCart={handleAddToCart}
+                  quantity={rec.quantity || rec.metadata?.quantity}
+                  unit={rec.unit || rec.metadata?.unit}
+                  variants={rec.variants}
+                  options={rec.options}
                 />
               </div>
             ))}

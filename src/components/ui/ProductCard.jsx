@@ -15,8 +15,32 @@ export default function ProductCard({
   images = [],
   badge,
   onAddToCart,
+  quantity,
+  unit,
+  variants = [],
+  options = [],
 }) {
   const [liked, setLiked] = useState(false);
+
+  // Extract displayed quantity/unit label
+  const getQuantityLabel = () => {
+    if (quantity && unit) {
+      return `${quantity} ${unit}`;
+    }
+    if (quantity) {
+      return `${quantity}`;
+    }
+    // Fallback: Check options or variants (e.g. 200ml, 1000ml)
+    if (Array.isArray(options) && options.length > 0 && options[0].values && options[0].values.length > 0) {
+      return options[0].values[0];
+    }
+    if (Array.isArray(variants) && variants.length > 0 && variants[0].title) {
+      return variants[0].title;
+    }
+    return null;
+  };
+
+  const quantityLabel = getQuantityLabel();
 
   // Compute hover image
   const getSecondaryImage = () => {
@@ -99,6 +123,13 @@ export default function ProductCard({
         {badge && (
           <span className="absolute top-4 left-4 z-10 bg-[#16a34a] text-white text-[10px] font-semibold tracking-wider px-3.5 py-1.5 rounded-full shadow-sm">
             {badge}
+          </span>
+        )}
+
+        {/* Quantity Badge (bottom-left overlay) */}
+        {quantityLabel && (
+          <span className="absolute bottom-4 left-4 z-10 bg-white/90 backdrop-blur-xs text-neutral-800 text-[9px] font-extrabold uppercase tracking-widest px-2.5 py-1 rounded-md shadow-2xs border border-neutral-200/40">
+            {quantityLabel}
           </span>
         )}
       </Link>

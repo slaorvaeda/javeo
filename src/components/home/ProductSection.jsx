@@ -156,6 +156,10 @@ export default function ProductSection() {
                   badge={product.badge || product.metadata?.badge || ""}
                   description={product.description}
                   onAddToCart={handleAddToCart}
+                  quantity={product.quantity || product.metadata?.quantity}
+                  unit={product.unit || product.metadata?.unit}
+                  variants={product.variants}
+                  options={product.options}
                 />
               </div>
             ))}
