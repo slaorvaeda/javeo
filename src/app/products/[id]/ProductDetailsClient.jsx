@@ -7,154 +7,6 @@ import ProductCard from "@/components/ui/ProductCard";
 import api from "@/utils/api";
 import { ProductDetailsSkeleton } from "@/components/ui/Skeleton";
 
-const PRODUCT_CATALOG = [
-  {
-    id: 1,
-    name: "Radiance Gold Serum",
-    category: "Serums & Oils",
-    price: 2499,
-    imageUrl: "/serum.webp",
-    badge: "Best Seller",
-    description: "Infused with 24k gold flakes and botanical oils to restore moisture and leave a radiant, healthy glow.",
-    ingredients: "24k Gold Flakes, Jojoba Seed Oil, Rosehip Fruit Oil, Argan Kernel Oil, Squalane, Vitamin E.",
-    directions: "Apply 2-3 drops onto clean, damp skin morning and night. Gently press into face and neck until fully absorbed.",
-    sizes: ["30ml", "50ml"]
-  },
-  {
-    id: 2,
-    name: "Hydration Boost Fluid",
-    category: "Serums & Oils",
-    price: 1899,
-    imageUrl: "/serum.webp",
-    badge: "Trending",
-    description: "A lightweight, fast-absorbing fluid packed with hyaluronic acid for 24-hour deep hydration.",
-    ingredients: "Multi-weight Hyaluronic Acid, Aloe Vera Juice, Panthenol (B5), Green Tea Extract, Glycerin.",
-    directions: "Massage a small amount onto face and neck after cleansing. Follow with your favorite moisturizer to lock in fluid hydration.",
-    sizes: ["50ml", "100ml"]
-  },
-  {
-    id: 3,
-    name: "Revitalize Cream",
-    category: "Moisturizers",
-    price: 2999,
-    imageUrl: "/hero-banner.webp",
-    badge: "New",
-    description: "Rich and velvety daily moisturizer formulated to smooth fine lines and improve skin elasticity.",
-    ingredients: "Vegan Collagen, Shea Butter, Rosewater, Centella Asiatica, Peptides, Niacinamide.",
-    directions: "Apply daily as the last step of your morning skincare routine. Smooth evenly over face, neck, and chest area.",
-    sizes: ["50ml"]
-  },
-  {
-    id: 4,
-    name: "Night Recovery Mask",
-    category: "Moisturizers",
-    price: 3299,
-    imageUrl: "/hero-banner.webp",
-    badge: "Limited",
-    description: "An overnight sleeping mask that repairs skin barrier and locks in nutrients while you sleep.",
-    ingredients: "Ceramides NP, Melatonin, Blue Tansy Oil, Chamomile Flower Extract, Allantoin.",
-    directions: "Smooth a generous layer over face and neck as the final step of your night routine. Leave on overnight and rinse in the morning.",
-    sizes: ["50ml", "75ml"]
-  },
-  {
-    id: 5,
-    name: "Soothing Milk Cleanser",
-    category: "Cleansers",
-    price: 1499,
-    imageUrl: "/serum.webp",
-    badge: "Best Seller",
-    description: "Gentle daily cleanser that removes impurities while maintaining natural moisture barrier.",
-    ingredients: "Oat Beta-Glucan, Sweet Almond Oil, Chamomile Extract, Cucumber Extract, Decyl Glucoside.",
-    directions: "Massage onto damp skin in circular motions. Rinse thoroughly with lukewarm water. Use morning and evening.",
-    sizes: ["150ml", "200ml"]
-  },
-  {
-    id: 6,
-    name: "Restorative Eye Gel",
-    category: "Treatments",
-    price: 1799,
-    imageUrl: "/hero-banner.webp",
-    badge: "New",
-    description: "Cooling eye gel formulated with peptide complexes to reduce puffiness and dark circles.",
-    ingredients: "Peptide Complex, Caffeine, Coenzyme Q10, Hyaluronic Acid, Licorice Root Extract.",
-    directions: "Dab a tiny dot around the eye contour area morning and night. Gently pat with your ring finger until fully dry.",
-    sizes: ["15ml"]
-  },
-  {
-    id: 7,
-    name: "Vitamin C Glow Drops",
-    category: "Serums & Oils",
-    price: 2199,
-    imageUrl: "/category-hair.webp",
-    badge: "Best Seller",
-    description: "Supercharged antioxidant cocktail to brighten complexions and boost collagen production.",
-    ingredients: "L-Ascorbic Acid (15%), Ferulic Acid, Vitamin E, Citrus Extract, Hyaluronic Acid.",
-    directions: "Apply 3-4 drops to dry face and neck in the morning after cleansing. Follow with sun protection.",
-    sizes: ["30ml"]
-  },
-  {
-    id: 8,
-    name: "Squalane Barrier Cream",
-    category: "Moisturizers",
-    price: 2499,
-    imageUrl: "/category-face.webp",
-    badge: "Trending",
-    description: "Bio-identical emollient cream that repairs dry skin barrier and locks deep hydration.",
-    ingredients: "Squalane (10%), Ceramide NP, Cholesterol, Phytosphingosine, Glycerin.",
-    directions: "Warm a pea-sized amount between fingertips and pat gently onto clean skin until absorbed. Apply daily.",
-    sizes: ["50ml"]
-  },
-  {
-    id: 8, // Wait, Catalog had duplicate id 8 in previous page.js but it's fine, let's keep original database ids
-    id: 9,
-    name: "Purifying Clay Cleanser",
-    category: "Cleansers",
-    price: 1299,
-    imageUrl: "/category-body.webp",
-    badge: "New",
-    description: "Deeply cleanses pores, balances sebum production, and prevents breakouts without drying skin.",
-    ingredients: "Kaolin Clay, Salicylic Acid (BHA 2%), Tea Tree Oil, Green Tea Leaves, Oat Kernel Extract.",
-    directions: "Apply to damp skin and work into a lather. Massage gently over acne-prone zones. Rinse off completely.",
-    sizes: ["120ml"]
-  },
-  {
-    id: 10,
-    name: "Brightening Treatment Toner",
-    category: "Treatments",
-    price: 1599,
-    imageUrl: "/serum.webp",
-    badge: "New",
-    description: "Exfoliating botanical treatment toner that clarifies, smooths texture, and balances pH.",
-    ingredients: "Glycolic Acid (AHA), Lactic Acid, Witch Hazel, Niacinamide, Licorice Extract.",
-    directions: "Saturate a cotton pad or pour into clean hands. Sweep gently over clean face and neck, avoiding eye zone.",
-    sizes: ["150ml"]
-  },
-  {
-    id: 11,
-    name: "Smoothing Peptide Serum",
-    category: "Serums & Oils",
-    price: 2799,
-    imageUrl: "/serum.webp",
-    badge: "Trending",
-    description: "Multi-peptide cellular serum designed to target wrinkles and restore facial elasticity.",
-    ingredients: "Argireline Peptide, Matrixyl 3000, Copper Tripeptide-1, Ginseng Extract, Centella Asiatica.",
-    directions: "Smooth 2-3 pumps onto clean face and neck morning and night before heavier oils or creams.",
-    sizes: ["30ml", "50ml"]
-  },
-  {
-    id: 12,
-    name: "Botanical Restoring Face Oil",
-    category: "Serums & Oils",
-    price: 3499,
-    imageUrl: "/category-hair.webp",
-    badge: "Limited",
-    description: "Luxurious pure cold-pressed botanical oils formulated to nourish dry, depleted skin barriers.",
-    ingredients: "Squalane, Marula Seed Oil, Evening Primrose Oil, Rosehip Oil, Sea Buckthorn Berry Extract.",
-    directions: "Warm 2-3 drops between your palms and gently press onto face as the last step of your evening routine.",
-    sizes: ["30ml"]
-  }
-];
-
 const formatRichText = (str) => {
   if (!str) return "";
   return str
@@ -229,7 +81,7 @@ export default function ProductDetailsClient({ id }) {
     }
   }, [product]);
 
-  // Fetch product from DB / API with fallback
+  // Fetch product from DB / API
   useEffect(() => {
     const loadProductDetails = async () => {
       try {
@@ -241,10 +93,8 @@ export default function ProductDetailsClient({ id }) {
           setProduct(data);
           setSelectedImage(data.imageUrl || "");
         } else {
-          // Fallback to static catalog item
-          const fallback = PRODUCT_CATALOG.find(p => p.id.toString() === productId.toString());
-          setProduct(fallback || null);
-          setSelectedImage(fallback?.imageUrl || "");
+          setProduct(null);
+          setSelectedImage("");
         }
 
         // Fetch dynamic product recommendations from DB/API
@@ -258,10 +108,9 @@ export default function ProductDetailsClient({ id }) {
           console.warn('Failed to fetch recommendations list from API:', listErr);
         }
       } catch (err) {
-        console.error('Failed to load from API, falling back to static catalog:', err);
-        const fallback = PRODUCT_CATALOG.find(p => p.id.toString() === productId.toString());
-        setProduct(fallback || null);
-        setSelectedImage(fallback?.imageUrl || "");
+        console.error('Failed to load product from API:', err);
+        setProduct(null);
+        setSelectedImage("");
       } finally {
         setLoading(false);
       }
@@ -339,8 +188,8 @@ export default function ProductDetailsClient({ id }) {
   const recommendations = useMemo(() => {
     if (!product) return [];
     
-    // Choose data source (API products list or fallback to static catalog)
-    const baseList = recommendedProducts.length > 0 ? recommendedProducts : PRODUCT_CATALOG;
+    // Choose data source (API products list or empty fallback)
+    const baseList = recommendedProducts.length > 0 ? recommendedProducts : [];
     const cleanCurrentId = product.id.toString();
 
     // Filter out the current product

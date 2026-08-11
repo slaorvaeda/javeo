@@ -4,66 +4,9 @@ import React, { useRef, useState, useEffect } from "react";
 import ProductCard from "../ui/ProductCard";
 import api from "@/utils/api";
 
-const PRODUCTS = [
-  {
-    id: 1,
-    name: "Radiance Gold Serum",
-    category: "Serums & Treatments",
-    price: 2499,
-    imageUrl: "/serum.webp",
-    badge: "Best Seller",
-    description: "Infused with 24k gold flakes and botanical oils to restore moisture and leave a radiant, healthy glow.",
-  },
-  {
-    id: 2,
-    name: "Hydration Boost Fluid",
-    category: "Serums & Treatments",
-    price: 1899,
-    imageUrl: "/serum.webp",
-    badge: "Trending",
-    description: "A lightweight, fast-absorbing fluid packed with hyaluronic acid for 24-hour deep hydration.",
-  },
-  {
-    id: 3,
-    name: "Revitalize Cream",
-    category: "Moisturizers",
-    price: 2999,
-    imageUrl: "/hero-banner.webp",
-    badge: "New",
-    description: "Rich and velvety daily moisturizer formulated to smooth fine lines and improve skin elasticity.",
-  },
-  {
-    id: 4,
-    name: "Night Recovery Mask",
-    category: "Moisturizers",
-    price: 3299,
-    imageUrl: "/hero-banner.webp",
-    badge: "Limited",
-    description: "An overnight sleeping mask that repairs skin barrier and locks in nutrients while you sleep.",
-  },
-  {
-    id: 5,
-    name: "Soothing Milk Cleanser",
-    category: "Cleansers",
-    price: 1499,
-    imageUrl: "/serum.webp",
-    badge: "Best Seller",
-    description: "Gentle daily cleanser that removes impurities while maintaining natural moisture barrier.",
-  },
-  {
-    id: 6,
-    name: "Restorative Eye Gel",
-    category: "Treatments",
-    price: 1799,
-    imageUrl: "/hero-banner.webp",
-    badge: "New",
-    description: "Cooling eye gel formulated with peptide complexes to reduce puffiness and dark circles.",
-  },
-];
-
 export default function ProductSection() {
   const sliderRef = useRef(null);
-  const [productsList, setProductsList] = useState(PRODUCTS);
+  const [productsList, setProductsList] = useState([]);
 
   useEffect(() => {
     api.get("/products?storeId=javeo-store-uuid-3333-4444")
