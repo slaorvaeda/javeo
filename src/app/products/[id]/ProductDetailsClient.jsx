@@ -270,6 +270,13 @@ export default function ProductDetailsClient({ id }) {
     loadProductDetails();
   }, [productId]);
 
+  // Dynamic client-side document title sync for SPA query parameter route /products?id=...
+  useEffect(() => {
+    if (typeof window !== "undefined" && product && product.name) {
+      document.title = `${product.name} | Javeo Skincare`;
+    }
+  }, [product]);
+
   // Sync size list (only return sizes if explicitly defined in product or metadata)
   const sizes = useMemo(() => {
     if (!product) return [];
