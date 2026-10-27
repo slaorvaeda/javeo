@@ -7,6 +7,17 @@ const api = axios.create({
   },
 });
 
+// Request interceptor to attach customer auth token
+api.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('javeo_customer_token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+  }
+  return config;
+});
+
 // Response interceptor to unwrap data payloads and unify error handling
 api.interceptors.response.use(
   (response) => {

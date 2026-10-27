@@ -3,8 +3,10 @@
 import React, { useRef, useState, useEffect } from "react";
 import ProductCard from "../ui/ProductCard";
 import api from "@/utils/api";
+import { useCart } from "@/context/CartContext";
 
 export default function ProductSection() {
+  const { addToCart } = useCart();
   const sliderRef = useRef(null);
   const [productsList, setProductsList] = useState([]);
 
@@ -20,10 +22,7 @@ export default function ProductSection() {
   }, []);
 
   const handleAddToCart = (id) => {
-    const product = productsList.find((p) => p.id === id);
-    if (product) {
-      alert(`Added "${product.name}" to cart!`);
-    }
+    addToCart(id, 1);
   };
 
   const scrollLeft = () => {

@@ -4,8 +4,10 @@ import React, { useState, useMemo, useEffect } from "react";
 import Link from "next/link";
 import ProductCard from "@/components/ui/ProductCard";
 import api from "@/utils/api";
+import { useCart } from "@/context/CartContext";
 
 export default function WishlistPage() {
+  const { addToCart } = useCart();
   const [wishlistIds, setWishlistIds] = useState([]);
   const [productsList, setProductsList] = useState([]);
 
@@ -42,10 +44,7 @@ export default function WishlistPage() {
   }, [productsList, wishlistIds]);
 
   const handleAddToCart = (id) => {
-    const product = productsList.find((p) => p.id === id);
-    if (product) {
-      alert(`Added "${product.name}" to cart!`);
-    }
+    addToCart(id, 1);
   };
 
   return (

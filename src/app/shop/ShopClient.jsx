@@ -6,10 +6,12 @@ import { useSearchParams } from "next/navigation";
 import ProductCard from "@/components/ui/ProductCard";
 import api from "@/utils/api";
 import { ProductCardSkeleton } from "@/components/ui/Skeleton";
+import { useCart } from "@/context/CartContext";
 
 const CATEGORIES = ["All Products", "Cleansers", "Serums & Oils", "Moisturizers", "Treatments"];
 
 function ShopContent() {
+  const { addToCart } = useCart();
   const [productsList, setProductsList] = useState([]);
   const [categoriesList, setCategoriesList] = useState(CATEGORIES);
   const [selectedCategory, setSelectedCategory] = useState("All Products");
@@ -79,10 +81,7 @@ function ShopContent() {
 
   // Handle Add to Cart action
   const handleAddToCart = (id) => {
-    const product = productsList.find((p) => p.id === id);
-    if (product) {
-      alert(`Added "${product.name}" to cart!`);
-    }
+    addToCart(id, 1);
   };
 
   // Filter and sort products dynamically

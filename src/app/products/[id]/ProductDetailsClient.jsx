@@ -6,6 +6,7 @@ import Link from "next/link";
 import ProductCard from "@/components/ui/ProductCard";
 import api from "@/utils/api";
 import { ProductDetailsSkeleton } from "@/components/ui/Skeleton";
+import { useCart } from "@/context/CartContext";
 
 const formatRichText = (str) => {
   if (!str) return "";
@@ -16,6 +17,7 @@ const formatRichText = (str) => {
 };
 
 export default function ProductDetailsClient({ id }) {
+  const { addToCart, actionLoadingId } = useCart();
   const productId = parseInt(id);
 
   const [product, setProduct] = useState(null);
@@ -171,17 +173,10 @@ export default function ProductDetailsClient({ id }) {
     window.dispatchEvent(new Event("wishlist-updated"));
   };
 
-  const handleAddToCart = () => {
+  const handleAddToCart = async () => {
     if (!product) return;
-    if (product.hasVariants) {
-      if (matchedVariant) {
-        alert(`Added "${product.name}" (${matchedVariant.title}) to cart!`);
-      } else {
-        alert('Please select a valid variant combination.');
-      }
-    } else {
-      alert(`Added "${product.name}" (${selectedSize}) to cart!`);
-    }
+    const variantId = product.hasVariants && matchedVariant ? matchedVariant.id : null;
+    await addToCart(product.id, quantity, variantId);
   };
 
   // Get recommended products (excluding current, sorted by category similarity)
@@ -410,9 +405,20 @@ export default function ProductDetailsClient({ id }) {
               ) : (
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 bg-[#1a1a1a] hover:bg-primary-brand text-white py-4 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 shadow-sm cursor-pointer hover:shadow-md active:scale-98"
+                  disabled={actionLoadingId === product.id}
+                  className="flex-1 bg-[#1a1a1a] hover:bg-primary-brand text-white py-4 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 shadow-sm cursor-pointer hover:shadow-md active:scale-98 disabled:opacity-60 flex items-center justify-center gap-2"
                 >
-                  Add To Cart ({quantity})
+                  {actionLoadingId === product.id ? (
+                    <>
+                      <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                      </svg>
+                      <span>Adding to Bag...</span>
+                    </>
+                  ) : (
+                    `Add To Cart (${quantity})`
+                  )}
                 </button>
               )}
 
@@ -561,7 +567,7 @@ export default function ProductDetailsClient({ id }) {
                   images={rec.metadata?.images || []}
                   badge={rec.badge}
                   description={rec.description}
-                  onAddToCart={handleAddToCart}
+                  onAddToCart={(recId) => addToCart(recId, 1)}
                   quantity={rec.quantity || rec.metadata?.quantity}
                   unit={rec.unit || rec.metadata?.unit}
                   variants={rec.variants}

@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useCart } from "@/context/CartContext";
 
 export default function ProductCard({
   id,
@@ -20,7 +21,19 @@ export default function ProductCard({
   variants = [],
   options = [],
 }) {
+  const { addToCart, actionLoadingId } = useCart();
   const [liked, setLiked] = useState(false);
+  const isAdding = actionLoadingId === id;
+
+  const handleCardAddToCart = (e) => {
+    e?.preventDefault?.();
+    e?.stopPropagation?.();
+    if (onAddToCart) {
+      onAddToCart(id);
+    } else {
+      addToCart(id, 1);
+    }
+  };
 
   // Extract displayed quantity/unit label
   const getQuantityLabel = () => {
@@ -181,10 +194,21 @@ export default function ProductCard({
             )}
           </div>
           <button
-            onClick={() => onAddToCart && onAddToCart(id)}
-            className="bg-[#1a1a1a] hover:bg-primary-brand text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 shadow-sm cursor-pointer"
+            onClick={handleCardAddToCart}
+            disabled={isAdding}
+            className="bg-[#1a1a1a] hover:bg-primary-brand text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-60 flex items-center gap-1.5"
           >
-            Add To Cart
+            {isAdding ? (
+              <>
+                <svg className="w-3.5 h-3.5 animate-spin" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
+                </svg>
+                <span>Adding...</span>
+              </>
+            ) : (
+              "Add To Cart"
+            )}
           </button>
         </div>
       </div>

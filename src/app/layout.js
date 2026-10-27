@@ -12,6 +12,10 @@ export const metadata = {
   },
 };
 
+import { CartProvider } from "@/context/CartContext";
+import { AuthProvider } from "@/context/AuthContext";
+import CartDrawer from "@/components/cart/CartDrawer";
+
 export default function RootLayout({ children }) {
   return (
     <html
@@ -19,12 +23,17 @@ export default function RootLayout({ children }) {
       className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col bg-background text-foreground font-sans">
-        <AOSInit />
-        <Navbar />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
+        <AuthProvider>
+          <CartProvider>
+            <AOSInit />
+            <Navbar />
+            <CartDrawer />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </CartProvider>
+        </AuthProvider>
       </body>
     </html>
   );
