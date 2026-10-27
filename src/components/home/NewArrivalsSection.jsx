@@ -116,7 +116,8 @@ export default function NewArrivalsSection() {
                   mrp={product.mrp}
                   imageUrl={product.imageUrl}
                   images={product.metadata?.images || []}
-                  badge={product.badge || product.metadata?.badge || "New"}
+                  marks={product.marks || []}
+                  badge={product.badge || product.metadata?.badge || (product.marks?.length ? "" : "New")}
                   description={product.description}
                   onAddToCart={handleAddToCart}
                   quantity={product.quantity || product.metadata?.quantity}

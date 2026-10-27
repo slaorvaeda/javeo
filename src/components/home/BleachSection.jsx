@@ -109,7 +109,8 @@ export default function BleachSection() {
                   mrp={product.mrp}
                   imageUrl={product.imageUrl}
                   images={product.metadata?.images || product.images || []}
-                  badge={product.badge || product.metadata?.badge || "Bleach"}
+                  marks={product.marks || []}
+                  badge={product.badge || product.metadata?.badge || (product.marks?.length ? "" : "Bleach")}
                   description={product.description}
                   onAddToCart={handleAddToCart}
                   quantity={product.quantity || product.metadata?.quantity}

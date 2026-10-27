@@ -219,6 +219,7 @@ function ShopContent() {
                   mrp={product.mrp}
                   imageUrl={product.imageUrl}
                   images={product.metadata?.images || []}
+                  marks={product.marks || []}
                   badge={product.badge || product.metadata?.badge || ""}
                   description={product.description}
                   onAddToCart={handleAddToCart}

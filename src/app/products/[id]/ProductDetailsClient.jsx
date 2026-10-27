@@ -565,6 +565,7 @@ export default function ProductDetailsClient({ id }) {
                   mrp={rec.mrp}
                   imageUrl={rec.imageUrl}
                   images={rec.metadata?.images || []}
+                  marks={product.marks || []}
                   badge={rec.badge}
                   description={rec.description}
                   onAddToCart={(recId) => addToCart(recId, 1)}

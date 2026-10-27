@@ -15,6 +15,7 @@ export default function ProductCard({
   secondaryImageUrl,
   images = [],
   badge,
+  marks = [],
   onAddToCart,
   quantity,
   unit,
@@ -132,12 +133,26 @@ export default function ProductCard({
           className="object-cover object-center absolute inset-0 w-full h-full opacity-0 scale-95 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
         />
 
-        {/* Badge (Trending/Best Seller/New) */}
-        {badge && (
+        {/* Badge / Marks (Top Left of Card) */}
+        {Array.isArray(marks) && marks.length > 0 ? (
+          <div className="absolute top-4 left-4 z-10 flex flex-wrap gap-1.5 max-w-[70%]">
+            {marks.map((mark) => (
+              <span
+                key={mark.id || mark.name}
+                className="text-white text-[10px] font-bold tracking-wider px-3 py-1 rounded-full shadow-sm uppercase backdrop-blur-md"
+                style={{
+                  backgroundColor: mark.color || "#16a34a",
+                }}
+              >
+                {mark.name}
+              </span>
+            ))}
+          </div>
+        ) : badge ? (
           <span className="absolute top-4 left-4 z-10 bg-[#16a34a] text-white text-[10px] font-semibold tracking-wider px-3.5 py-1.5 rounded-full shadow-sm">
             {badge}
           </span>
-        )}
+        ) : null}
       </Link>
 
       {/* Heart/Like Button */}
