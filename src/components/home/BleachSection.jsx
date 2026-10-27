@@ -70,14 +70,15 @@ export default function BleachSection() {
     api.get("/products?storeId=javeo-store-uuid-3333-4444")
       .then((body) => {
         if (body?.success && Array.isArray(body.data)) {
-          // Filter strictly for Bleach products
+          // Filter strictly for actual Bleach products (exclude cleansing milks miscategorized as bleach)
           const filtered = body.data.filter((p) => {
-            const cat = (p.categoryName || p.category || "").toLowerCase();
             const name = (p.name || "").toLowerCase();
-            return cat === "bleach" || name.includes("bleach");
+            return name.includes("bleach");
           });
 
           if (filtered.length > 0) {
+            // Sort ascending by ID (104 -> 107) to maintain stable natural order
+            filtered.sort((a, b) => Number(a.id) - Number(b.id));
             setBleachList(filtered);
           }
         }

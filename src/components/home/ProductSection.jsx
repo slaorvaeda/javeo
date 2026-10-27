@@ -14,7 +14,13 @@ export default function ProductSection() {
     api.get("/products?storeId=javeo-store-uuid-3333-4444")
       .then((body) => {
         if (body.success && Array.isArray(body.data) && body.data.length > 0) {
-          const activeProducts = body.data.filter((p) => p.metadata?.isActive !== false);
+          const activeProducts = body.data.filter((p) => {
+            if (p.metadata?.isActive === false) return false;
+            const name = (p.name || "").toLowerCase();
+            const cat = (p.categoryName || p.category || "").toLowerCase();
+            // Bleach products are exclusively displayed in the dedicated Bleaches section
+            return !name.includes("bleach") && cat !== "bleach";
+          });
           setProductsList(activeProducts);
         }
       })
