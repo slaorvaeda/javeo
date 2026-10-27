@@ -198,14 +198,21 @@ export default function ProductCard({
 
         {/* Bottom bar with price and Add to Cart button */}
         <div className="mt-auto flex items-center justify-between">
-          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5">
+          <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 flex-wrap">
             <span className="text-base font-bold text-foreground">
               ₹{parseFloat(price).toLocaleString("en-IN")}
             </span>
             {mrp && parseFloat(mrp) > parseFloat(price) && (
-              <span className="text-xs text-neutral-400 line-through font-normal">
-                ₹{parseFloat(mrp).toLocaleString("en-IN")}
-              </span>
+              <>
+                <span className="text-xs text-neutral-400 line-through font-normal">
+                  ₹{parseFloat(mrp).toLocaleString("en-IN")}
+                </span>
+                {Math.round(((parseFloat(mrp) - parseFloat(price)) / parseFloat(mrp)) * 100) > 0 && (
+                  <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200/60 font-sans">
+                    {Math.round(((parseFloat(mrp) - parseFloat(price)) / parseFloat(mrp)) * 100)}% OFF
+                  </span>
+                )}
+              </>
             )}
           </div>
           <button

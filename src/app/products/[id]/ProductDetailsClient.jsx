@@ -249,12 +249,29 @@ export default function ProductDetailsClient({ id }) {
                 className="object-cover object-center scale-[0.95] rounded-2xl transition-transform duration-500 ease-in-out hover:scale-[1.05] cursor-pointer"
               />
 
-              {/* Product Badge */}
-              {product.badge && (
-                <span className="absolute top-6 left-6 z-10 bg-[#16a34a] text-white text-[10px] font-semibold tracking-wider px-3.5 py-1.5 rounded-full shadow-sm uppercase">
-                  {product.badge}
-                </span>
-              )}
+              {/* Product Badge & Discount Tag */}
+              <div className="absolute top-6 left-6 z-10 flex flex-wrap gap-2">
+                {product.badge && (
+                  <span className="bg-[#16a34a] text-white text-[10px] font-semibold tracking-wider px-3.5 py-1.5 rounded-full shadow-sm uppercase">
+                    {product.badge}
+                  </span>
+                )}
+                {(() => {
+                  const currentPrice = parseFloat(matchedVariant ? matchedVariant.price : product.price) || 0;
+                  const currentMrp = parseFloat(matchedVariant ? matchedVariant.mrp : product.mrp) || 0;
+                  const discountPct = (currentMrp > currentPrice)
+                    ? Math.round(((currentMrp - currentPrice) / currentMrp) * 100)
+                    : 0;
+                  if (discountPct > 0) {
+                    return (
+                      <span className="bg-red-600 text-white text-[10px] font-bold tracking-wider px-3 py-1.5 rounded-full shadow-sm uppercase">
+                        {discountPct}% OFF
+                      </span>
+                    );
+                  }
+                  return null;
+                })()}
+              </div>
             </div>
 
             {/* Gallery Thumbnail Row */}
@@ -303,17 +320,32 @@ export default function ProductDetailsClient({ id }) {
               {product.name}
             </h1>
 
-            {/* Pricing */}
-            <div className="flex items-baseline gap-3 mb-6 font-sans">
-              <span className="text-2xl font-bold text-foreground">
-                ₹{(matchedVariant ? matchedVariant.price : product.price).toLocaleString("en-IN")}
-              </span>
-              {((matchedVariant ? matchedVariant.mrp : product.mrp)) && parseFloat(matchedVariant ? matchedVariant.mrp : product.mrp) > parseFloat(matchedVariant ? matchedVariant.price : product.price) && (
-                <span className="text-base text-neutral-400 line-through font-normal">
-                  ₹{parseFloat(matchedVariant ? matchedVariant.mrp : product.mrp).toLocaleString("en-IN")}
-                </span>
-              )}
-            </div>
+            {/* Pricing & Rounded Discount Badge */}
+            {(() => {
+              const currentPrice = parseFloat(matchedVariant ? matchedVariant.price : product.price) || 0;
+              const currentMrp = parseFloat(matchedVariant ? matchedVariant.mrp : product.mrp) || 0;
+              const discountPct = (currentMrp > currentPrice)
+                ? Math.round(((currentMrp - currentPrice) / currentMrp) * 100)
+                : 0;
+
+              return (
+                <div className="flex items-center flex-wrap gap-3 mb-6 font-sans">
+                  <span className="text-2xl sm:text-3xl font-bold text-foreground">
+                    ₹{currentPrice.toLocaleString("en-IN")}
+                  </span>
+                  {currentMrp > currentPrice && (
+                    <span className="text-base text-neutral-400 line-through font-normal">
+                      ₹{currentMrp.toLocaleString("en-IN")}
+                    </span>
+                  )}
+                  {discountPct > 0 && (
+                    <span className="text-xs font-bold text-emerald-700 bg-emerald-50 border border-emerald-200/80 px-2.5 py-1 rounded-full uppercase tracking-wider">
+                      {discountPct}% OFF
+                    </span>
+                  )}
+                </div>
+              );
+            })()}
 
             {/* Catalog Description */}
             <div
