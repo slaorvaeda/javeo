@@ -5,86 +5,26 @@ import ProductCard from "../ui/ProductCard";
 import api from "@/utils/api";
 import { useCart } from "@/context/CartContext";
 
-// Production Bleach Products Fallback ensuring zero-downtime render
-const FALLBACK_BLEACH_PRODUCTS = [
-  {
-    id: 104,
-    name: "VITAMIN C SHINIER BLEACH | HD FAIRNESS | RADIANT GLOWING & BEAUTIFUL SKIN",
-    price: 300,
-    mrp: 800,
-    description: "Supercharged with stabilized Vitamin C antioxidants to neutralize environmental dullness, lighten fine facial hair, and restore supple morning luminosity.",
-    imageUrl: "https://res.cloudinary.com/du5qspp8n/image/upload/v1793098811/cpanel_uploads/um6iqbiqukgssxzxjhyl.png",
-    images: ["https://res.cloudinary.com/du5qspp8n/image/upload/v1793098831/cpanel_uploads/uvw7y2yi2iwrnyvgdgx5.png"],
-    category: "Bleach",
-    quantity: "250",
-    unit: "g",
-    badge: "Best Seller",
-  },
-  {
-    id: 105,
-    name: "SKIN WHITENING SHINIER BLEACH | HD FAIRNESS | WHITER - BRIGHTER & LIGHTER SKIN TONE",
-    price: 340,
-    mrp: 780,
-    description: "Ultra-nourishing brightening formula targeting hyperpigmentation, uneven patches, and dull epidermal layers for high-definition luminous skin tone.",
-    imageUrl: "https://res.cloudinary.com/du5qspp8n/image/upload/v1793098954/cpanel_uploads/slq1hdivfjjwv2wut1qb.png",
-    images: ["https://res.cloudinary.com/du5qspp8n/image/upload/v1793098980/cpanel_uploads/elp5qrdmekvbdk1r4i3j.png"],
-    category: "Bleach",
-    quantity: "300",
-    unit: "g",
-    badge: "Skin Brightening",
-  },
-  {
-    id: 106,
-    name: "OXY DIAMOND SHINIER BLEACH | HD FAIRNESS | SKIN ENERGIZING & YOUTHFUL GLOW",
-    price: 450,
-    mrp: 900,
-    description: "Infused with active micro-oxygen spheres and diamond ash to deeply energize cellular respiration, unveiling breathtaking diamond clarity and youthful radiance.",
-    imageUrl: "https://res.cloudinary.com/du5qspp8n/image/upload/v1793099094/cpanel_uploads/r47qaiczkpkwzsfgs6xg.png",
-    images: ["https://res.cloudinary.com/du5qspp8n/image/upload/v1793099119/cpanel_uploads/jr7nxsgspuq5vstmwuyq.png"],
-    category: "Bleach",
-    quantity: "300",
-    unit: "g",
-    badge: "50% OFF",
-  },
-  {
-    id: 107,
-    name: "DE-TAN SHINIER BLEACH | HD FAIRNESS | ACNE CONTROL & UV PROTECTION",
-    price: 350,
-    mrp: 560,
-    description: "Formulated with specialized anti-tan actives, botanical tea tree, and UV barrier shields to gently eliminate deep sun tanning while maintaining skin hydration.",
-    imageUrl: "https://res.cloudinary.com/du5qspp8n/image/upload/v1793099421/cpanel_uploads/ekgvrvwx8apccgw9sqyv.png",
-    images: ["https://res.cloudinary.com/du5qspp8n/image/upload/v1793099307/cpanel_uploads/zypxk1szj6nj0xbuwwry.png"],
-    category: "Bleach",
-    quantity: "350",
-    unit: "g",
-    badge: "De-Tan Formula",
-  },
-];
-
 export default function BleachSection() {
   const { addToCart } = useCart();
   const sliderRef = useRef(null);
-  const [bleachList, setBleachList] = useState(FALLBACK_BLEACH_PRODUCTS);
+  const [bleachList, setBleachList] = useState([]);
 
   useEffect(() => {
     api.get("/products?storeId=javeo-store-uuid-3333-4444")
       .then((body) => {
         if (body?.success && Array.isArray(body.data)) {
-          // Filter strictly for actual Bleach products (exclude cleansing milks miscategorized as bleach)
+          // Display any products configured under the bleach category in backend
           const filtered = body.data.filter((p) => {
-            const name = (p.name || "").toLowerCase();
-            return name.includes("bleach");
+            if (p.metadata?.isActive === false || p.isActive === 0) return false;
+            const cat = (p.categoryName || p.category || "").trim().toLowerCase();
+            return cat === "bleach";
           });
-
-          if (filtered.length > 0) {
-            // Sort ascending by ID (104 -> 107) to maintain stable natural order
-            filtered.sort((a, b) => Number(a.id) - Number(b.id));
-            setBleachList(filtered);
-          }
+          setBleachList(filtered);
         }
       })
       .catch((err) => {
-        console.warn("Using fallback bleach collection:", err);
+        console.error("Failed to load bleach products from backend:", err);
       });
   }, []);
 
@@ -103,6 +43,11 @@ export default function BleachSection() {
       sliderRef.current.scrollBy({ left: 380, behavior: "smooth" });
     }
   };
+
+  // If no bleach products are found in the backend, don't render an empty section
+  if (!bleachList || bleachList.length === 0) {
+    return null;
+  }
 
   return (
     <section id="bleach-collection" className="bg-[#fcfaf7] py-20 border-t border-border-brand/40 overflow-hidden font-sans">
@@ -167,8 +112,8 @@ export default function BleachSection() {
                   badge={product.badge || product.metadata?.badge || "Bleach"}
                   description={product.description}
                   onAddToCart={handleAddToCart}
-                  quantity={product.quantity || product.metadata?.quantity || "250"}
-                  unit={product.unit || product.metadata?.unit || "g"}
+                  quantity={product.quantity || product.metadata?.quantity}
+                  unit={product.unit || product.metadata?.unit}
                   variants={product.variants || []}
                   options={product.options || []}
                 />
