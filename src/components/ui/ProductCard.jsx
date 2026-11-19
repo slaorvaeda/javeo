@@ -178,16 +178,18 @@ export default function ProductCard({
       </button>
 
       {/* Details container */}
-      <div className="flex flex-1 flex-col pt-5 px-1.5 pb-1">
+      <div className="flex flex-1 flex-col pt-4 px-1 pb-1">
         <Link href={`/products?id=${id}`} className="hover:text-primary-brand transition-colors duration-300 cursor-pointer">
-          <h3 className="text-lg font-bold tracking-tight text-foreground mb-2 leading-snug line-clamp-1">
+          <h3 className="text-[13px] sm:text-sm font-bold tracking-tight text-foreground mb-2 leading-snug line-clamp-2 min-h-[38px] sm:min-h-[40px]">
             {name}
           </h3>
         </Link>
 
-        <p className="text-xs text-muted-brand leading-relaxed mb-5 font-sans line-clamp-2 min-h-[36px] sm:min-h-[40px]">
-          {description}
-        </p>
+        {description ? (
+          <p className="text-xs text-muted-brand leading-relaxed mb-4 font-sans line-clamp-2 min-h-[32px]">
+            {description}
+          </p>
+        ) : null}
 
         {/* Quantity and Unit Label */}
         {quantityLabel && (
