@@ -52,11 +52,11 @@ export default function CleansingMilkSection() {
   }
 
   return (
-    <section id="cleansing-milk-collection" className="bg-white py-20 border-t border-border-brand/40 overflow-hidden font-sans">
+    <section id="cleansing-milk-collection" className="bg-white py-10 border-t border-border-brand/40 overflow-hidden font-sans">
       <div className="w-full px-4 sm:px-8 md:px-12">
         
         {/* Section Header */}
-        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-12 gap-6" data-aos="fade-up">
+        <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between mb-6 gap-6" data-aos="fade-up">
           <div className="max-w-xl">
             <span className="text-xs font-bold text-primary-brand tracking-widest uppercase font-sans">
               Gentle Daily Care
