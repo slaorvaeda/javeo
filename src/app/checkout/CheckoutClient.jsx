@@ -314,7 +314,7 @@ export default function CheckoutClient() {
                   <img
                     src={item.image || "/serum.png"}
                     alt={item.name}
-                    className="w-14 h-14 object-cover rounded-lg bg-neutral-50 border border-border-brand/40"
+                    className="w-14 h-14 object-contain p-1 rounded-lg bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] border border-border-brand/40"
                     onError={(e) => {
                       e.target.onerror = null;
                       e.target.src = "/serum.png";

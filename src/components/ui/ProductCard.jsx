@@ -121,7 +121,7 @@ export default function ProductCard({
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover object-center transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-0"
+          className="object-contain object-center p-4 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-0"
         />
 
         {/* Secondary Hover Image */}
@@ -130,7 +130,7 @@ export default function ProductCard({
           alt={`${name} Texture`}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover object-center absolute inset-0 w-full h-full opacity-0 scale-95 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
+          className="object-contain object-center p-4 absolute inset-0 w-full h-full opacity-0 scale-95 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
         />
 
         {/* Badge / Marks (Top Left of Card) */}

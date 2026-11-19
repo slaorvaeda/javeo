@@ -110,14 +110,14 @@ export default function RegimenSection() {
                   {/* Image Container */}
                   <Link
                     href={`/products?id=${item.productId}`}
-                    className="relative aspect-square w-full rounded-[1.75rem] overflow-hidden bg-neutral-50 mb-6 flex items-center justify-center cursor-pointer block"
+                    className="relative aspect-square w-full rounded-[1.75rem] overflow-hidden bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] mb-6 flex items-center justify-center cursor-pointer block"
                   >
                     <Image
                       src={item.imageUrl}
                       alt={item.name}
                       fill
                       sizes="(max-width: 768px) 100vw, 33vw"
-                      className="object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105"
+                      className="object-contain object-center p-4 transition-transform duration-700 ease-out group-hover:scale-105"
                     />
                     <div className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-xs text-[10px] font-bold px-2.5 py-1 rounded-full text-foreground shadow-2xs">
                       {item.volume}

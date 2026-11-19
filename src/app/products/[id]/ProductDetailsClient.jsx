@@ -239,14 +239,14 @@ export default function ProductDetailsClient({ id }) {
 
           {/* Left Column (Product Image Frame + Thumbnails Grid) */}
           <div className="lg:col-span-6 w-full flex flex-col" data-aos="fade-right">
-            <div className="relative aspect-[4/3.8] w-full overflow-hidden rounded-[2.25rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] border border-border-brand/40 shadow-sm">
+            <div className="relative aspect-[4/3.8] w-full overflow-hidden rounded-[2.25rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] border border-border-brand/40 shadow-sm flex items-center justify-center">
               <Image
                 src={selectedImage || "/serum.webp"}
                 alt={product.name}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-cover object-center scale-[0.95] rounded-2xl transition-transform duration-500 ease-in-out hover:scale-[1.05] cursor-pointer"
+                className="object-contain object-center p-6 sm:p-8 transition-transform duration-500 ease-in-out hover:scale-[1.03] cursor-pointer drop-shadow-sm"
               />
 
               {/* Product Badge & Discount Tag */}
@@ -282,10 +282,10 @@ export default function ProductDetailsClient({ id }) {
                     key={i}
                     type="button"
                     onClick={() => setSelectedImage(img)}
-                    className={`relative h-16 w-16 sm:h-20 sm:w-20 rounded-2xl overflow-hidden border-2 transition-all flex-shrink-0 cursor-pointer ${selectedImage === img ? 'border-[#1a1a1a] scale-102 shadow-sm' : 'border-zinc-200 hover:border-zinc-400'
+                    className={`relative h-16 w-16 sm:h-20 sm:w-20 rounded-2xl overflow-hidden border-2 bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] transition-all flex-shrink-0 cursor-pointer ${selectedImage === img ? 'border-[#1a1a1a] scale-102 shadow-sm' : 'border-zinc-200 hover:border-zinc-400'
                       }`}
                   >
-                    <Image src={img} alt={`Thumbnail ${i + 1}`} fill className="object-cover" />
+                    <Image src={img} alt={`Thumbnail ${i + 1}`} fill className="object-contain p-1.5" />
                   </button>
                 ))}
               </div>

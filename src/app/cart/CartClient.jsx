@@ -88,12 +88,12 @@ export default function CartClient() {
                       <div className="flex items-center gap-4 min-w-0">
                         <Link
                           href={`/products?id=${item.productId}`}
-                          className="w-20 h-20 rounded-xl overflow-hidden bg-neutral-50 border border-border-brand/50 flex-shrink-0"
+                          className="w-20 h-20 rounded-xl overflow-hidden bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] border border-border-brand/50 flex-shrink-0 flex items-center justify-center p-1.5"
                         >
                           <img
                             src={item.image || "/serum.png"}
                             alt={item.name}
-                            className="w-full h-full object-cover"
+                            className="w-full h-full object-contain"
                             onError={(e) => {
                               e.target.onerror = null;
                               e.target.src = "/serum.png";

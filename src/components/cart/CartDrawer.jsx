@@ -132,12 +132,12 @@ export default function CartDrawer() {
                   <Link
                     href={`/products?id=${item.productId}`}
                     onClick={closeCart}
-                    className="relative w-20 h-20 flex-shrink-0 bg-neutral-50 rounded-xl overflow-hidden border border-border-brand/50 group"
+                    className="relative w-20 h-20 flex-shrink-0 bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] rounded-xl overflow-hidden border border-border-brand/50 group flex items-center justify-center p-1.5"
                   >
                     <img
                       src={item.image || "/serum.png"}
                       alt={item.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-300"
                       onError={(e) => {
                         e.target.onerror = null;
                         e.target.src = "/serum.png";
