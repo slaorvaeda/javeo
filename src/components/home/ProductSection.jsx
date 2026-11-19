@@ -46,7 +46,7 @@ export default function ProductSection() {
   };
 
   return (
-    <section id="best-sellers" className="bg-white py-20 border-t border-border-brand/40 overflow-hidden">
+    <section id="best-sellers" className="bg-white py-10 border-t border-border-brand/40 overflow-hidden">
       <div className="w-full px-4 sm:px-8 md:px-12">
         
         {/* Header container (Flex row for Title only) */}
