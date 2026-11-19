@@ -18,8 +18,10 @@ export default function ProductSection() {
             if (p.metadata?.isActive === false) return false;
             const name = (p.name || "").toLowerCase();
             const cat = (p.categoryName || p.category || "").toLowerCase();
-            // Bleach products are exclusively displayed in the dedicated Bleaches section
-            return !name.includes("bleach") && cat !== "bleach";
+            // Bleach and Cleansing Milk products are exclusively displayed in their dedicated sections
+            const isBleach = name.includes("bleach") || cat === "bleach";
+            const isCleansingMilk = name.includes("cleansing milk") || cat === "cleansing milk";
+            return !isBleach && !isCleansingMilk;
           });
           setProductsList(activeProducts);
         }

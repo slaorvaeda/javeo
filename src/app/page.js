@@ -3,6 +3,7 @@ import Hero from "@/components/home/Hero";
 import CategorySection from "@/components/home/CategorySection";
 import ProductSection from "@/components/home/ProductSection";
 import BleachSection from "@/components/home/BleachSection";
+import CleansingMilkSection from "@/components/home/CleansingMilkSection";
 import RetinoidSection from "@/components/home/RetinoidSection";
 import ClinicalResultsSection from "@/components/home/ClinicalResultsSection";
 import CleanPromise from "@/components/home/CleanPromise";
@@ -24,6 +25,9 @@ export default function Home() {
       
       {/* 4. High-Definition Shinier Bleach Collection */}
       <BleachSection />
+
+      {/* 5. Gentle Nourishing Cleansing Milk Collection */}
+      <CleansingMilkSection />
 
       {/* 6. Interactive Retinoid & Ingredients Bottle Spotlight (Existing) */}
       <RetinoidSection />
