@@ -105,7 +105,7 @@ export default function NewArrivalsSection() {
             {newProducts.map((product, idx) => (
               <div
                 key={product.id}
-                className="w-full sm:w-[calc((100%-24px)/2)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] xl:w-[calc((100%-96px)/5)] flex-shrink-0 snap-start"
+                className="w-full sm:w-[calc((100%-24px)/2)] md:w-[calc((100%-48px)/3)] lg:w-[calc((100%-72px)/4)] flex-shrink-0 snap-start"
                 data-aos="fade-up"
                 data-aos-delay={idx * 100}
               >
