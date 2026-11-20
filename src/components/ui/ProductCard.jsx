@@ -78,21 +78,12 @@ export default function ProductCard({
       return uniqueImages[1];
     }
     
-    // Fallback based on name keywords if no secondary image exists
-    const lowerName = (name || "").toLowerCase();
-    if (lowerName.includes("serum") || lowerName.includes("oil") || lowerName.includes("fluid")) {
-      return "/category-face.webp";
-    }
-    if (lowerName.includes("cream") || lowerName.includes("mask") || lowerName.includes("moisturizer")) {
-      return "/category-body.webp";
-    }
-    if (lowerName.includes("cleanser") || lowerName.includes("wash")) {
-      return "/category-essentials.webp";
-    }
-    return "/category-hair.webp";
+    // No distinct second image exists - return null so the primary image displays on hover
+    return null;
   };
 
   const hoverImg = getSecondaryImage();
+  const hasSecondaryImage = Boolean(hoverImg && hoverImg !== imageUrl);
 
   // Sync liked state with localStorage
   useEffect(() => {
@@ -137,17 +128,21 @@ export default function ProductCard({
           alt={name}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-contain object-center p-4 transition-all duration-700 ease-out group-hover:scale-105 group-hover:opacity-0"
+          className={`object-contain object-center p-4 transition-all duration-700 ease-out group-hover:scale-105 ${
+            hasSecondaryImage ? "group-hover:opacity-0" : ""
+          }`}
         />
 
-        {/* Secondary Hover Image */}
-        <Image
-          src={hoverImg}
-          alt={`${name} Texture`}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
-          className="object-cover object-center absolute inset-0 w-full h-full opacity-0 scale-95 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
-        />
+        {/* Secondary Hover Image (only if distinct 2nd image exists) */}
+        {hasSecondaryImage && (
+          <Image
+            src={hoverImg}
+            alt={`${name} Texture`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 25vw"
+            className="object-cover object-center absolute inset-0 w-full h-full opacity-0 scale-95 transition-all duration-700 ease-out group-hover:opacity-100 group-hover:scale-100"
+          />
+        )}
 
         {/* Badge / Marks (Top Left of Card) */}
         {Array.isArray(marks) && marks.length > 0 ? (
