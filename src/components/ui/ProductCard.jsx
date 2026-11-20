@@ -56,14 +56,30 @@ export default function ProductCard({
 
   const quantityLabel = getQuantityLabel();
 
-  // Compute hover image
+  // Compute hover image (accurately displays the 2nd image after the cover image)
   const getSecondaryImage = () => {
-    if (secondaryImageUrl) return secondaryImageUrl;
-    if (Array.isArray(images) && images.length > 1) return images[1];
-    if (Array.isArray(images) && images.length > 0) return images[0];
+    if (secondaryImageUrl && secondaryImageUrl !== imageUrl) {
+      return secondaryImageUrl;
+    }
+
+    // Combine cover image and gallery images in sequential order
+    const allImages = [
+      imageUrl,
+      ...(Array.isArray(images) ? images : [])
+    ].filter(Boolean);
+
+    // Deduplicate while preserving exact order
+    const uniqueImages = allImages.filter(
+      (img, index) => allImages.indexOf(img) === index
+    );
+
+    // If a distinct 2nd image exists after the cover, display it on hover
+    if (uniqueImages.length > 1) {
+      return uniqueImages[1];
+    }
     
-    // Fallback based on name keywords
-    const lowerName = name.toLowerCase();
+    // Fallback based on name keywords if no secondary image exists
+    const lowerName = (name || "").toLowerCase();
     if (lowerName.includes("serum") || lowerName.includes("oil") || lowerName.includes("fluid")) {
       return "/category-face.webp";
     }
