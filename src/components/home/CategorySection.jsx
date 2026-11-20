@@ -19,15 +19,15 @@ const CATEGORIES = [
   },
   {
     label: "Hair care",
-    imageUrl: "/category-haircare.webp",
+    imageUrl: "/category-hair.webp",
     link: "#hair-care",
-    objectFit: "object-cover",
+    objectFit: "object-contain p-4",
   },
   {
     label: "Essentials",
     imageUrl: "/category-essentials.webp",
     link: "#essentials",
-    objectFit: "object-cover",
+    objectFit: "object-contain p-4",
   },
 ];
 
