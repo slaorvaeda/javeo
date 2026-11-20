@@ -42,7 +42,7 @@ export default function QuizBanner() {
         >
           <Image
             src="/routine-banner.webp"
-            alt="Hydra-Barrier Skincare Cream Jar resting on stones"
+            alt="JAVEO Botox Hair Mask Intensive Treatment jar resting on stones"
             fill
             priority
             sizes="(max-width: 768px) 100vw, 50vw"
