@@ -19,7 +19,7 @@ const CATEGORIES = [
   },
   {
     label: "Hair care",
-    imageUrl: "/category-hair.webp",
+    imageUrl: "/category-haircare.webp",
     link: "#hair-care",
     objectFit: "object-cover",
   },
