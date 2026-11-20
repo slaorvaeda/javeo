@@ -21,7 +21,7 @@ const CATEGORIES = [
     label: "Hair care",
     imageUrl: "/category-hair.webp",
     link: "#hair-care",
-    objectFit: "object-contain p-4",
+    objectFit: "object-cover",
   },
   {
     label: "Essentials",
