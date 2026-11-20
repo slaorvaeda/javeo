@@ -256,6 +256,8 @@ export default function ProductDetailsClient({ id }) {
                     {product.badge}
                   </span>
                 )}
+                {/* Discount tag hidden for brand reveal */}
+                {/*
                 {(() => {
                   const currentPrice = parseFloat(matchedVariant ? matchedVariant.price : product.price) || 0;
                   const currentMrp = parseFloat(matchedVariant ? matchedVariant.mrp : product.mrp) || 0;
@@ -271,6 +273,7 @@ export default function ProductDetailsClient({ id }) {
                   }
                   return null;
                 })()}
+                */}
               </div>
             </div>
 
@@ -320,7 +323,8 @@ export default function ProductDetailsClient({ id }) {
               {product.name}
             </h1>
 
-            {/* Pricing & Rounded Discount Badge */}
+            {/* Pricing & Rounded Discount Badge hidden for brand reveal */}
+            {/*
             {(() => {
               const currentPrice = parseFloat(matchedVariant ? matchedVariant.price : product.price) || 0;
               const currentMrp = parseFloat(matchedVariant ? matchedVariant.mrp : product.mrp) || 0;
@@ -346,6 +350,7 @@ export default function ProductDetailsClient({ id }) {
                 </div>
               );
             })()}
+            */}
 
             {/* Catalog Description */}
             <div

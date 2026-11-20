@@ -200,6 +200,8 @@ export default function ProductCard({
 
         {/* Bottom bar with price and Add to Cart button */}
         <div className="mt-auto flex items-center justify-between">
+          {/* Selling Price & MRP hidden for brand reveal */}
+          {/*
           <div className="flex flex-col sm:flex-row sm:items-baseline gap-1.5 flex-wrap">
             <span className="text-base font-bold text-foreground">
               ₹{parseFloat(price).toLocaleString("en-IN")}
@@ -217,10 +219,11 @@ export default function ProductCard({
               </>
             )}
           </div>
+          */}
           <button
             onClick={handleCardAddToCart}
             disabled={isAdding}
-            className="bg-[#1a1a1a] hover:bg-primary-brand text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-60 flex items-center gap-1.5"
+            className="w-full justify-center bg-[#1a1a1a] hover:bg-primary-brand text-white px-5 py-2.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-300 shadow-sm cursor-pointer disabled:opacity-60 flex items-center gap-1.5"
           >
             {isAdding ? (
               <>
