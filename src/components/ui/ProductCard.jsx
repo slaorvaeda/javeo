@@ -6,40 +6,66 @@ import Link from "next/link";
 import { useCart } from "@/context/CartContext";
 
 // SVG Icons for Marketplaces
-function AmazonIcon({ className = "w-3.5 h-3.5" }) {
+function AmazonIcon({ className = "w-4 h-4" }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M13.92 14.75c-2.67 1.97-6.55 3.03-9.92 1.39-.47-.23-.08-.75.31-.91 3.2-1.33 6.8-2.31 9.38-.85.34.19.46.54.23.37zm1.14-1.25c-.34-.44-2.27-.21-3.14-.11-.26.03-.3-.19-.07-.35 1.5-1.04 3.96-.74 4.26-.37.3.38-.08 2.87-1.5 4.02-.22.18-.43.08-.33-.16.34-.82.95-2.82.78-3.03zM21.71 18.24c-1.39 1.62-3.41 2.82-5.46 3.42-.42.12-.59-.22-.29-.46 2.05-1.63 4.14-3.57 4.96-5.87.19-.53.79-.19.79.29 0 .97-.73 2.04-1.44 2.89l1.44-.27z" />
-      <path d="M12.9 3.2c-4.4 0-7.8 2.5-7.8 6.4 0 2.4 1.4 4.4 3.6 5.3.4.2.7 0 .7-.4v-.6c0-.3-.2-.5-.5-.6-1.5-.7-2.3-2.1-2.3-3.7 0-2.8 2.6-4.7 6.3-4.7 3.5 0 5.8 1.8 5.8 4.4 0 1.9-1.1 3.2-2.8 3.2-.9 0-1.6-.5-1.6-1.3 0-1 .7-2.2.7-3.3 0-1-.5-1.6-1.5-1.6-1.2 0-2 1.2-2 2.6 0 1 .4 1.7 1 2.1-.8 1.4-1.5 3.1-1.5 4.6 0 1.8 1.2 3.1 3.2 3.1 2.4 0 4.5-1.7 5.2-3.9h.1v3.4c0 .4.3.6.6.6h1.5c.3 0 .6-.3.6-.6V9.6c0-4-3-6.4-7.2-6.4z" />
+    <svg viewBox="0 0 24 24" className={className} aria-label="Amazon">
+      {/* Dark Amazon 'a' */}
+      <path
+        d="M13.2 12.2c-.1-.5-.3-.9-.7-1.2-.4-.3-.8-.4-1.4-.4-.6 0-1.1.2-1.5.6-.4.4-.6.9-.6 1.5 0 .6.2 1.1.6 1.5.4.4.9.6 1.5.6.5 0 1-.1 1.4-.4.4-.3.6-.7.7-1.2v-1zM7.5 13.5c0-1.1.4-1.9 1.1-2.5.7-.7 1.6-1.1 2.7-1.1.8 0 1.5.2 2.2.7V10c0-.7-.2-1.2-.6-1.5-.4-.4-1-.6-1.7-.6-.7 0-1.3.2-1.8.5-.5.4-.9.8-1 1.4L7 9.5c.3-1 .9-1.8 1.8-2.4.9-.6 2-1 3.2-1 1.3 0 2.3.4 3 1.1.7.7 1.1 1.8 1.1 3.1v5.3h-1.5v-1.1c-.6.8-1.5 1.2-2.6 1.2-1 0-1.9-.4-2.6-1-.8-.8-1.1-1.7-1.1-2.7z"
+        fill="#232F3E"
+      />
+      {/* Orange smile arrow */}
+      <path
+        d="M5.8 16.6c3.6 2.3 8.3 2.6 12.2 1 .3-.1.6.2.4.5-3.8 2.6-9 2.3-13-.5-.3-.3 0-.7.4-.6z"
+        fill="#FF9900"
+      />
+      <path
+        d="M18.8 17.1c.3.2.5.5.6.8 0 .1 0 .3-.1.4-.5.3-1.2.5-2 .6-.3 0-.4-.2-.3-.5.5-.5 1.1-1 1.8-1.3z"
+        fill="#FF9900"
+      />
     </svg>
   );
 }
 
-function FlipkartIcon({ className = "w-3.5 h-3.5" }) {
+function FlipkartIcon({ className = "w-4 h-4" }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M5.5 3h13c.8 0 1.5.7 1.5 1.5v15c0 .8-.7 1.5-1.5 1.5h-13C4.7 21 4 20.3 4 19.5v-15C4 3.7 4.7 3 5.5 3zm4 4v10h2.3v-4.2h3.2v-2H11.8V9.2h3.7V7H9.5z" />
+    <svg viewBox="0 0 24 24" className={className} aria-label="Flipkart">
+      <circle cx="12" cy="12" r="11" fill="#2874F0" />
+      <path d="M7.5 9.5h9l-1 8h-7l-1-8z" fill="#FFE11B" />
+      <path
+        d="M10 9.5V8c0-1.1.9-2 2-2s2 .9 2 2v1.5"
+        stroke="#FFE11B"
+        strokeWidth="1.2"
+        fill="none"
+      />
+      <path
+        d="M12.6 11.2h-1.4v1.1h1.2v.8h-1.2v2.7H10v-5.4h2.6v.8z"
+        fill="#2874F0"
+      />
     </svg>
   );
 }
 
-function MyntraIcon({ className = "w-3.5 h-3.5" }) {
+function MyntraIcon({ className = "w-4 h-4" }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M4.5 7.5L8.2 14l3.5-6.5h2.6L8.8 17.5v3H6.2v-3L2 7.5h2.5zm7.3 0L15.5 14l3.5-6.5H22L16.5 17.5v3H14v-3L9.5 7.5h2.3z" />
+    <svg viewBox="0 0 24 24" className={className} aria-label="Myntra">
+      <circle cx="12" cy="12" r="11" fill="#FFFFFF" stroke="#E5E7EB" strokeWidth="0.8" />
+      <path d="M5.5 8l3 5.5 2.8-5.5h2l-3.8 7.5v2.5h-1.8v-2.5L4 8h1.5zm6 0l2.8 5.5 3-5.5H19l-3.8 7.5v2.5h-1.8v-2.5L9.8 8h1.7z" fill="#FF3F6C" />
+      <path d="M8.5 13.5l2.8-5.5h1.2l-3 5.5h-1zM14.5 13.5l2.8-5.5h1.2l-3 5.5h-1z" fill="#F26A35" />
     </svg>
   );
 }
 
-function NykaaIcon({ className = "w-3.5 h-3.5" }) {
+function NykaaIcon({ className = "w-4 h-4" }) {
   return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor">
-      <path d="M4.5 4.5h3.5l7.5 10.8V4.5H19v15h-3.5L8 8.7v10.8H4.5V4.5z" />
+    <svg viewBox="0 0 24 24" className={className} aria-label="Nykaa">
+      <circle cx="12" cy="12" r="11" fill="#FC2779" />
+      <path d="M7.5 7h2.2l4.8 6.8V7H16v10h-2.2L9 10.2V17H7.5V7z" fill="#FFFFFF" />
     </svg>
   );
 }
 
-function ExternalStoreIcon({ className = "w-3.5 h-3.5" }) {
+function ExternalStoreIcon({ className = "w-4 h-4" }) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="2">
       <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25c-.67 0-1.19-.578-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -130,12 +156,39 @@ export default function ProductCard({
 
   // Extract external marketplace links
   const allRawLinks = Array.isArray(links) && links.length > 0
-    ? links
-    : (Array.isArray(metadata?.links) ? metadata.links : []);
+    ? [...links]
+    : (Array.isArray(metadata?.links) ? [...metadata.links] : []);
 
-  const activeLinks = allRawLinks.filter(
+  let resolvedLinks = allRawLinks.filter(
     (l) => l && typeof l.url === "string" && l.url.trim() !== ""
   );
+
+  // If metadata has individual marketplace URLs, add them
+  if (metadata?.amazonUrl && !resolvedLinks.some(l => (l.platformName || l.name || l.url || "").toLowerCase().includes("amazon"))) {
+    resolvedLinks.push({ platformName: "Amazon", url: metadata.amazonUrl });
+  }
+  if (metadata?.flipkartUrl && !resolvedLinks.some(l => (l.platformName || l.name || l.url || "").toLowerCase().includes("flipkart"))) {
+    resolvedLinks.push({ platformName: "Flipkart", url: metadata.flipkartUrl });
+  }
+  if (metadata?.myntraUrl && !resolvedLinks.some(l => (l.platformName || l.name || l.url || "").toLowerCase().includes("myntra"))) {
+    resolvedLinks.push({ platformName: "Myntra", url: metadata.myntraUrl });
+  }
+
+  // If no specific links are configured yet in the DB/metadata, provide smart Amazon & Flipkart links
+  // so the small Amazon and Flipkart icons display accordingly on the product card
+  if (resolvedLinks.length === 0 && name && metadata?.hideMarketplaceLinks !== true) {
+    const query = encodeURIComponent(`Javeo ${name}`);
+    resolvedLinks = [
+      {
+        platformName: "Amazon",
+        url: `https://www.amazon.in/s?k=${query}`,
+      },
+      {
+        platformName: "Flipkart",
+        url: `https://www.flipkart.com/search?q=${query}`,
+      },
+    ];
+  }
 
   const handleCardAddToCart = (e) => {
     e?.preventDefault?.();
@@ -151,7 +204,7 @@ export default function ProductCard({
     e?.preventDefault?.();
     e?.stopPropagation?.();
     if (onEnquire) {
-      onEnquire({ id, name, imageUrl, links: activeLinks });
+      onEnquire({ id, name, imageUrl, links: resolvedLinks });
     } else {
       setIsEnquireOpen(true);
     }
@@ -366,9 +419,9 @@ export default function ProductCard({
           </button>
 
           {/* External Marketplace Icons (Amazon, Flipkart, Myntra, Nykaa, etc.) */}
-          {activeLinks.length > 0 && (
+          {resolvedLinks.length > 0 && (
             <div className="flex items-center gap-1 sm:gap-1.5 shrink-0">
-              {activeLinks.map((link, idx) => {
+              {resolvedLinks.map((link, idx) => {
                 const meta = getPlatformMeta(link);
                 return (
                   <a
@@ -384,7 +437,7 @@ export default function ProductCard({
                     {meta.logoUrl ? (
                       <img src={meta.logoUrl} alt={meta.name} className="w-4 h-4 object-contain rounded-full" />
                     ) : (
-                      <meta.Icon className="w-3.5 h-3.5" />
+                      <meta.Icon className="w-4 h-4" />
                     )}
                   </a>
                 );
