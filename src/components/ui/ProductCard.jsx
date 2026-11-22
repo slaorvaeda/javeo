@@ -66,7 +66,7 @@ const getPlatformMeta = (link) => {
       logoUrl: link.platformLogoUrl || link.logoUrl,
     };
   }
-  if (name.includes("flipkart") || url.includes("flipkart")) {
+  if (name.includes("flipkart") || name.includes("flip kart") || name.includes("flip-kart") || url.includes("flipkart")) {
     return {
       name: "Flipkart",
       title: "Buy on Flipkart",
