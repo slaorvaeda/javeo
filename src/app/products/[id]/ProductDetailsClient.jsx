@@ -181,7 +181,7 @@ export default function ProductDetailsClient({ id }) {
   // Get recommended products (excluding current, sorted by category similarity)
   const recommendations = useMemo(() => {
     if (!product) return [];
-    
+
     // Choose data source (API products list or empty fallback)
     const baseList = recommendedProducts.length > 0 ? recommendedProducts : [];
     const cleanCurrentId = product.id.toString();
@@ -238,14 +238,14 @@ export default function ProductDetailsClient({ id }) {
 
           {/* Left Column (Product Image Frame + Thumbnails Grid) */}
           <div className="lg:col-span-6 w-full flex flex-col" data-aos="fade-right">
-            <div className="relative aspect-[4/3.8] w-full overflow-hidden rounded-[2.25rem] bg-gradient-to-b from-[#F3ECE0]/30 to-[#FAF8F5] border border-border-brand/40 shadow-sm flex items-center justify-center">
+            <div className="relative aspect-[4/3.8] w-full overflow-hidden shadow-sm flex items-center justify-center">
               <Image
                 src={selectedImage || "/serum.webp"}
                 alt={product.name}
                 fill
                 priority
                 sizes="(max-width: 1024px) 100vw, 50vw"
-                className="object-contain object-center p-6 sm:p-8 transition-transform duration-500 ease-in-out hover:scale-[1.03] cursor-pointer drop-shadow-sm"
+                className="object-contain object-center p-6 sm:p-8 transition-transform duration-500 ease-in-out hover:scale-[1.03] rounded-3xl cursor-pointer drop-shadow-sm"
               />
 
               {/* Product Badge & Discount Tag */}
@@ -303,8 +303,8 @@ export default function ProductDetailsClient({ id }) {
                 {product.category}
               </span>
               {product.marks && product.marks.map(mark => (
-                <span 
-                  key={mark.id} 
+                <span
+                  key={mark.id}
                   className="text-[10px] font-extrabold px-2 py-0.5 rounded-full border uppercase tracking-wider font-sans"
                   style={{
                     backgroundColor: `${mark.color}15`,
@@ -371,8 +371,8 @@ export default function ProductDetailsClient({ id }) {
                         key={val}
                         onClick={() => setSelectedOptions(prev => ({ ...prev, [opt.name]: val }))}
                         className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider font-sans transition-all duration-300 cursor-pointer ${isSelected
-                            ? "bg-[#1a1a1a] text-white shadow-sm"
-                            : "bg-white border border-border-brand text-muted-brand hover:border-foreground hover:text-foreground"
+                          ? "bg-[#1a1a1a] text-white shadow-sm"
+                          : "bg-white border border-border-brand text-muted-brand hover:border-foreground hover:text-foreground"
                           }`}
                       >
                         {val}
@@ -395,8 +395,8 @@ export default function ProductDetailsClient({ id }) {
                       key={sz}
                       onClick={() => setSelectedSize(sz)}
                       className={`px-6 py-2.5 rounded-full text-xs font-semibold tracking-wider font-sans transition-all duration-300 cursor-pointer ${selectedSize === sz
-                          ? "bg-[#1a1a1a] text-white shadow-sm"
-                          : "bg-white border border-border-brand text-muted-brand hover:border-foreground hover:text-foreground"
+                        ? "bg-[#1a1a1a] text-white shadow-sm"
+                        : "bg-white border border-border-brand text-muted-brand hover:border-foreground hover:text-foreground"
                         }`}
                     >
                       {sz}
