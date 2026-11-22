@@ -4,29 +4,9 @@ import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useCart } from "@/context/CartContext";
+import { FaAmazon } from "react-icons/fa6";
 
-// SVG Icons for Marketplaces
-function AmazonIcon({ className = "w-4 h-4" }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-label="Amazon">
-      {/* Dark Amazon 'a' */}
-      <path
-        d="M13.2 12.2c-.1-.5-.3-.9-.7-1.2-.4-.3-.8-.4-1.4-.4-.6 0-1.1.2-1.5.6-.4.4-.6.9-.6 1.5 0 .6.2 1.1.6 1.5.4.4.9.6 1.5.6.5 0 1-.1 1.4-.4.4-.3.6-.7.7-1.2v-1zM7.5 13.5c0-1.1.4-1.9 1.1-2.5.7-.7 1.6-1.1 2.7-1.1.8 0 1.5.2 2.2.7V10c0-.7-.2-1.2-.6-1.5-.4-.4-1-.6-1.7-.6-.7 0-1.3.2-1.8.5-.5.4-.9.8-1 1.4L7 9.5c.3-1 .9-1.8 1.8-2.4.9-.6 2-1 3.2-1 1.3 0 2.3.4 3 1.1.7.7 1.1 1.8 1.1 3.1v5.3h-1.5v-1.1c-.6.8-1.5 1.2-2.6 1.2-1 0-1.9-.4-2.6-1-.8-.8-1.1-1.7-1.1-2.7z"
-        fill="#232F3E"
-      />
-      {/* Orange smile arrow */}
-      <path
-        d="M5.8 16.6c3.6 2.3 8.3 2.6 12.2 1 .3-.1.6.2.4.5-3.8 2.6-9 2.3-13-.5-.3-.3 0-.7.4-.6z"
-        fill="#FF9900"
-      />
-      <path
-        d="M18.8 17.1c.3.2.5.5.6.8 0 .1 0 .3-.1.4-.5.3-1.2.5-2 .6-.3 0-.4-.2-.3-.5.5-.5 1.1-1 1.8-1.3z"
-        fill="#FF9900"
-      />
-    </svg>
-  );
-}
-
+// Marketplace Icons
 function FlipkartIcon({ className = "w-4 h-4" }) {
   return (
     <svg viewBox="0 0 24 24" className={className} aria-label="Flipkart">
@@ -82,7 +62,7 @@ const getPlatformMeta = (link) => {
       name: "Amazon",
       title: "Buy on Amazon",
       badgeColor: "text-[#FF9900] border-neutral-200 hover:border-[#FF9900] hover:bg-[#FFF8ED]",
-      Icon: AmazonIcon,
+      Icon: FaAmazon,
       logoUrl: link.platformLogoUrl || link.logoUrl,
     };
   }
@@ -173,21 +153,8 @@ export default function ProductCard({
   if (metadata?.myntraUrl && !resolvedLinks.some(l => (l.platformName || l.name || l.url || "").toLowerCase().includes("myntra"))) {
     resolvedLinks.push({ platformName: "Myntra", url: metadata.myntraUrl });
   }
-
-  // If no specific links are configured yet in the DB/metadata, provide smart Amazon & Flipkart links
-  // so the small Amazon and Flipkart icons display accordingly on the product card
-  if (resolvedLinks.length === 0 && name && metadata?.hideMarketplaceLinks !== true) {
-    const query = encodeURIComponent(`Javeo ${name}`);
-    resolvedLinks = [
-      {
-        platformName: "Amazon",
-        url: `https://www.amazon.in/s?k=${query}`,
-      },
-      {
-        platformName: "Flipkart",
-        url: `https://www.flipkart.com/search?q=${query}`,
-      },
-    ];
+  if (metadata?.nykaaUrl && !resolvedLinks.some(l => (l.platformName || l.name || l.url || "").toLowerCase().includes("nykaa"))) {
+    resolvedLinks.push({ platformName: "Nykaa", url: metadata.nykaaUrl });
   }
 
   const handleCardAddToCart = (e) => {
