@@ -3,7 +3,6 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/context/CartContext";
 import { FaAmazon } from "react-icons/fa6";
 
 // Marketplace Icons
@@ -113,7 +112,6 @@ export default function ProductCard({
   images = [],
   badge,
   marks = [],
-  onAddToCart,
   onEnquire,
   quantity,
   unit,
@@ -122,7 +120,6 @@ export default function ProductCard({
   links = [],
   metadata = {},
 }) {
-  const { addToCart, actionLoadingId } = useCart();
   const [liked, setLiked] = useState(false);
   const [isEnquireOpen, setIsEnquireOpen] = useState(false);
   const [enquirySubmitted, setEnquirySubmitted] = useState(false);
@@ -131,8 +128,6 @@ export default function ProductCard({
     contact: "",
     message: `Hi, I would like to enquire about ${name}.`,
   });
-
-  const isAdding = actionLoadingId === id;
 
   // Extract external marketplace links
   const allRawLinks = Array.isArray(links) && links.length > 0
@@ -156,16 +151,6 @@ export default function ProductCard({
   if (metadata?.nykaaUrl && !resolvedLinks.some(l => (l.platformName || l.name || l.url || "").toLowerCase().includes("nykaa"))) {
     resolvedLinks.push({ platformName: "Nykaa", url: metadata.nykaaUrl });
   }
-
-  const handleCardAddToCart = (e) => {
-    e?.preventDefault?.();
-    e?.stopPropagation?.();
-    if (onAddToCart) {
-      onAddToCart(id);
-    } else {
-      addToCart(id, 1);
-    }
-  };
 
   const handleEnquireClick = (e) => {
     e?.preventDefault?.();

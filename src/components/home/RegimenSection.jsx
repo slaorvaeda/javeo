@@ -1,9 +1,8 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCart } from "@/context/CartContext";
 
 const REGIMEN_STEPS = [
   {
@@ -42,29 +41,6 @@ const REGIMEN_STEPS = [
 ];
 
 export default function RegimenSection() {
-  const { addToCart, actionLoadingId } = useCart();
-  const [addingBundle, setAddingBundle] = useState(false);
-  const [bundleAdded, setBundleAdded] = useState(false);
-
-  const individualTotal = REGIMEN_STEPS.reduce((sum, item) => sum + item.price, 0);
-  const bundleDiscountPrice = Math.round(individualTotal * 0.85); // 15% discount
-  const savings = individualTotal - bundleDiscountPrice;
-
-  const handleAddBundleToCart = async () => {
-    try {
-      setAddingBundle(true);
-      for (const item of REGIMEN_STEPS) {
-        await addToCart(item.productId, 1);
-      }
-      setBundleAdded(true);
-      setTimeout(() => setBundleAdded(false), 3500);
-    } catch (err) {
-      console.error("Failed to add bundle to cart:", err);
-    } finally {
-      setAddingBundle(false);
-    }
-  };
-
   return (
     <section id="daily-regimen" className="bg-[#FAF8F5] py-20 border-t border-border-brand/40 overflow-hidden">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -140,19 +116,18 @@ export default function RegimenSection() {
                   </div>
                 </div>
 
-                {/* Bottom Row: Price & Quick Add */}
+                {/* Bottom Row: Step & View Product */}
                 <div className="pt-4 border-t border-neutral-100 flex items-center justify-between mt-auto">
-                  <span className="text-base font-bold text-foreground">
-                    ₹{item.price.toLocaleString("en-IN")}
+                  <span className="text-xs font-semibold text-primary-brand font-serif">
+                    Step {item.step}
                   </span>
-                  <button
-                    type="button"
-                    onClick={() => addToCart(item.productId, 1)}
-                    disabled={isItemAdding}
-                    className="text-xs font-bold text-foreground hover:text-primary-brand transition-colors cursor-pointer disabled:opacity-50"
+                  <Link
+                    href={`/products?id=${item.productId}`}
+                    className="text-xs font-bold text-foreground hover:text-primary-brand transition-colors cursor-pointer inline-flex items-center gap-1"
                   >
-                    {isItemAdding ? "Adding..." : "+ Add to Bag"}
-                  </button>
+                    <span>View Product</span>
+                    <span>→</span>
+                  </Link>
                 </div>
               </div>
             );
@@ -166,51 +141,24 @@ export default function RegimenSection() {
         >
           <div className="space-y-1 text-center md:text-left">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 text-emerald-800 text-[10px] font-bold uppercase tracking-wider mb-1">
-              <span>Save 15% With Full Routine</span>
+              <span>Complete Daily Routine</span>
             </div>
             <h3 className="text-xl sm:text-2xl font-serif font-bold text-foreground">
-              Bundle All 3 Steps & Transform Your Barrier
+              Transform Your Skin Barrier With All 3 Steps
             </h3>
             <p className="text-xs text-muted-brand">
               Includes Soothing Cleanser (150ml) + Radiance Serum (30ml) + Revitalize Cream (50ml).
             </p>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center gap-4 shrink-0">
-            <div className="text-center sm:text-right">
-              <div className="text-xs text-neutral-400 line-through">
-                ₹{individualTotal.toLocaleString("en-IN")}
-              </div>
-              <div className="text-2xl font-bold text-foreground">
-                ₹{bundleDiscountPrice.toLocaleString("en-IN")}
-              </div>
-            </div>
-
-            <button
-              type="button"
-              onClick={handleAddBundleToCart}
-              disabled={addingBundle}
-              className="px-8 py-4 rounded-full bg-[#1a1a1a] text-white text-xs font-bold uppercase tracking-wider hover:bg-primary-brand transition-all shadow-sm cursor-pointer disabled:opacity-60 flex items-center gap-2"
+          <div className="flex items-center shrink-0">
+            <Link
+              href="/shop"
+              className="px-8 py-4 rounded-full bg-[#1a1a1a] text-white text-xs font-bold uppercase tracking-wider hover:bg-primary-brand transition-all shadow-sm cursor-pointer inline-flex items-center gap-2"
             >
-              {addingBundle ? (
-                <>
-                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                  </svg>
-                  <span>Adding Bundle...</span>
-                </>
-              ) : bundleAdded ? (
-                <>
-                  <svg className="w-4 h-4 text-emerald-400" viewBox="0 0 20 20" fill="currentColor">
-                    <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                  </svg>
-                  <span>Bundle Added!</span>
-                </>
-              ) : (
-                "Add Full Routine (Save ₹" + savings.toLocaleString("en-IN") + ")"
-              )}
-            </button>
+              <span>Explore All Formulations</span>
+              <span>→</span>
+            </Link>
           </div>
         </div>
 

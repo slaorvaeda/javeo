@@ -6,7 +6,6 @@ import Link from "next/link";
 import ProductCard from "@/components/ui/ProductCard";
 import api from "@/utils/api";
 import { ProductDetailsSkeleton } from "@/components/ui/Skeleton";
-import { useCart } from "@/context/CartContext";
 
 const formatRichText = (str) => {
   if (!str) return "";
@@ -17,7 +16,6 @@ const formatRichText = (str) => {
 };
 
 export default function ProductDetailsClient({ id }) {
-  const { addToCart, actionLoadingId } = useCart();
   const productId = parseInt(id);
 
   const [product, setProduct] = useState(null);
@@ -29,6 +27,13 @@ export default function ProductDetailsClient({ id }) {
   const [liked, setLiked] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState({});
   const [recommendedProducts, setRecommendedProducts] = useState([]);
+  const [isEnquireOpen, setIsEnquireOpen] = useState(false);
+  const [enquirySubmitted, setEnquirySubmitted] = useState(false);
+  const [enquiryForm, setEnquiryForm] = useState({
+    name: "",
+    contact: "",
+    message: "",
+  });
 
   const matchedVariant = useMemo(() => {
     if (!product || !product.hasVariants || !product.variants) return null;
@@ -171,12 +176,6 @@ export default function ProductDetailsClient({ id }) {
     }
     localStorage.setItem("wishlist", JSON.stringify(wishlist));
     window.dispatchEvent(new Event("wishlist-updated"));
-  };
-
-  const handleAddToCart = async () => {
-    if (!product) return;
-    const variantId = product.hasVariants && matchedVariant ? matchedVariant.id : null;
-    await addToCart(product.id, quantity, variantId);
   };
 
   // Get recommended products (excluding current, sorted by category similarity)
@@ -407,63 +406,28 @@ export default function ProductDetailsClient({ id }) {
               </div>
             )}
 
-            {/* Quantity Counter & Purchase CTA buttons */}
-            <div className="flex flex-wrap items-center gap-3 mb-8 border-y border-border-brand/20 py-6">
-
-              {/* Quantity Counter */}
-              <div className="flex items-center border border-border-brand/50 rounded-full p-1 bg-neutral-50/50">
-                <button
-                  type="button"
-                  onClick={() => setQuantity(prev => Math.max(1, prev - 1))}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-zinc-600 hover:bg-white hover:shadow-xs transition-all font-bold cursor-pointer select-none"
-                >
-                  -
-                </button>
-                <span className="w-8 text-center text-xs font-bold text-foreground font-sans">
-                  {quantity}
-                </span>
-                <button
-                  type="button"
-                  onClick={() => setQuantity(prev => prev + 1)}
-                  className="w-8 h-8 rounded-full flex items-center justify-center text-zinc-600 hover:bg-white hover:shadow-xs transition-all font-bold cursor-pointer select-none"
-                >
-                  +
-                </button>
-              </div>
-
-              {/* Add to Cart button */}
-              {product.metadata?.isActive === false ? (
-                <button
-                  disabled
-                  className="flex-1 bg-neutral-100 border border-neutral-200 text-neutral-400 py-4 rounded-full text-xs font-semibold uppercase tracking-widest cursor-not-allowed transition-all duration-300"
-                >
-                  Unavailable
-                </button>
-              ) : (
-                <button
-                  onClick={handleAddToCart}
-                  disabled={actionLoadingId === product.id}
-                  className="flex-1 bg-[#1a1a1a] hover:bg-primary-brand text-white py-4 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 shadow-sm cursor-pointer hover:shadow-md active:scale-98 disabled:opacity-60 flex items-center justify-center gap-2"
-                >
-                  {actionLoadingId === product.id ? (
-                    <>
-                      <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24" fill="none">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8H4z" />
-                      </svg>
-                      <span>Adding to Bag...</span>
-                    </>
-                  ) : (
-                    `Add To Cart (${quantity})`
-                  )}
-                </button>
-              )}
+            {/* Enquiry CTA & Wishlist button */}
+            <div className="flex items-center gap-3 mb-8 border-y border-border-brand/20 py-6">
+              <button
+                type="button"
+                onClick={() => {
+                  setEnquiryForm((prev) => ({
+                    ...prev,
+                    message: `Hi, I would like to enquire about ${product?.name || "this product"}.`,
+                  }));
+                  setIsEnquireOpen(true);
+                }}
+                className="flex-1 bg-[#1a1a1a] hover:bg-primary-brand text-white py-4 rounded-full text-xs font-semibold uppercase tracking-widest transition-all duration-300 shadow-sm cursor-pointer hover:shadow-md active:scale-98 flex items-center justify-center gap-2"
+              >
+                <span>Enquire Now</span>
+                <span className="text-sm font-sans">→</span>
+              </button>
 
               {/* Wishlist Heart button */}
               <button
                 onClick={handleLikeToggle}
                 type="button"
-                className="h-12 w-12 flex items-center justify-center border border-border-brand bg-white hover:bg-neutral-50 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
+                className="h-12 w-12 flex items-center justify-center border border-border-brand bg-white hover:bg-neutral-50 rounded-full transition-all duration-300 hover:scale-105 active:scale-95 cursor-pointer shadow-sm shrink-0"
                 aria-label="Add to wishlist"
               >
                 <svg
@@ -605,7 +569,6 @@ export default function ProductDetailsClient({ id }) {
                   marks={rec.marks || []}
                   badge={rec.badge}
                   description={rec.description}
-                  onAddToCart={(recId) => addToCart(recId, 1)}
                   quantity={rec.quantity || rec.metadata?.quantity}
                   unit={rec.unit || rec.metadata?.unit}
                   variants={rec.variants}
@@ -619,6 +582,140 @@ export default function ProductDetailsClient({ id }) {
         </div>
 
       </div>
+
+      {/* Product Enquiry Modal */}
+      {isEnquireOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in duration-200"
+          onClick={() => setIsEnquireOpen(false)}
+        >
+          <div
+            className="bg-white rounded-3xl p-6 sm:p-7 max-w-md w-full shadow-2xl relative font-sans text-left border border-border-brand/20"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close button */}
+            <button
+              type="button"
+              onClick={() => setIsEnquireOpen(false)}
+              className="absolute top-4 right-4 p-2 text-neutral-400 hover:text-neutral-700 hover:bg-neutral-100 rounded-full transition-colors cursor-pointer"
+              aria-label="Close"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+
+            {/* Product Summary Header */}
+            <div className="flex items-center gap-3.5 pb-4 border-b border-neutral-100 pr-6">
+              <div className="relative w-14 h-14 rounded-xl bg-neutral-50 overflow-hidden shrink-0 border border-neutral-100">
+                <Image
+                  src={selectedImage || product?.imageUrl || "/logo.webp"}
+                  alt={product?.name || "Product"}
+                  fill
+                  className="object-contain p-1"
+                />
+              </div>
+              <div>
+                <span className="text-[10px] font-bold uppercase tracking-wider text-primary-brand block">Direct Enquiry</span>
+                <h4 className="text-sm font-bold text-foreground line-clamp-1">{product?.name}</h4>
+                {selectedSize && <span className="text-[11px] text-muted-brand">{selectedSize}</span>}
+              </div>
+            </div>
+
+            {enquirySubmitted ? (
+              <div className="py-8 text-center space-y-3">
+                <div className="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto">
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2.5" d="M5 13l4 4L19 7" />
+                  </svg>
+                </div>
+                <h5 className="text-base font-bold text-foreground">Enquiry Received!</h5>
+                <p className="text-xs text-muted-brand max-w-xs mx-auto">
+                  Thank you for your interest in {product?.name}. Our team will get in touch with you shortly.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEnquirySubmitted(false);
+                    setIsEnquireOpen(false);
+                  }}
+                  className="mt-3 px-5 py-2 text-xs font-semibold bg-[#1a1a1a] text-white rounded-full hover:bg-primary-brand transition-colors cursor-pointer"
+                >
+                  Done
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  setEnquirySubmitted(true);
+                }}
+                className="mt-4 space-y-3"
+              >
+                {/* Quick WhatsApp Action */}
+                <a
+                  href={`https://wa.me/?text=${encodeURIComponent(`Hi Javeo Team, I would like to enquire about ${product?.name || "this product"}.`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="w-full flex items-center justify-center gap-2 py-2.5 px-4 bg-[#25D366] hover:bg-[#20bd5a] text-white rounded-full text-xs font-bold transition-all shadow-sm cursor-pointer"
+                >
+                  <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.698c.969.585 1.761.884 2.796.884 3.179 0 5.767-2.587 5.767-5.766.001-3.18-2.585-5.771-5.767-5.771zm3.392 8.244c-.144.405-.837.774-1.17.824-.299.045-.677.063-1.092-.069-.252-.08-.575-.187-.988-.365-1.739-.751-2.874-2.502-2.961-2.617-.087-.116-.708-.94-.708-1.793s.448-1.273.607-1.446c.159-.173.346-.217.462-.217l.332.006c.106.005.249-.04.39.298.144.347.491 1.2.534 1.287.043.087.072.188.014.304-.058.116-.087.188-.173.289l-.26.304c-.087.086-.177.18-.076.354.101.174.449.741.964 1.201.662.591 1.221.774 1.394.86.173.086.275.072.376-.044.101-.116.433-.506.549-.68.116-.173.231-.145.39-.086s1.011.477 1.184.564.289.13.332.202c.045.072.045.419-.099.824zm-3.392-12.416c-5.514 0-10 4.486-10 10 0 1.83.498 3.546 1.365 5.023l-1.452 5.309 5.467-1.433c1.417.81 3.053 1.267 4.795 1.267 5.514 0 10-4.486 10-10s-4.486-10-10-10z" />
+                  </svg>
+                  <span>Enquire on WhatsApp</span>
+                </a>
+
+                <div className="relative flex py-1 items-center">
+                  <div className="flex-grow border-t border-neutral-200"></div>
+                  <span className="flex-shrink mx-3 text-[10px] text-muted-brand uppercase tracking-wider font-semibold">Or Leave a Message</span>
+                  <div className="flex-grow border-t border-neutral-200"></div>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-foreground mb-1">Your Name *</label>
+                  <input
+                    type="text"
+                    required
+                    value={enquiryForm.name}
+                    onChange={(e) => setEnquiryForm({ ...enquiryForm, name: e.target.value })}
+                    placeholder="Your Name"
+                    className="w-full px-3.5 py-2 text-xs border border-border-brand/40 rounded-xl focus:outline-none focus:border-primary-brand"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-foreground mb-1">Phone Number or Email *</label>
+                  <input
+                    type="text"
+                    required
+                    value={enquiryForm.contact}
+                    onChange={(e) => setEnquiryForm({ ...enquiryForm, contact: e.target.value })}
+                    placeholder="+91 98765 43210 or email"
+                    className="w-full px-3.5 py-2 text-xs border border-border-brand/40 rounded-xl focus:outline-none focus:border-primary-brand"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-semibold text-foreground mb-1">Message</label>
+                  <textarea
+                    rows={2}
+                    value={enquiryForm.message}
+                    onChange={(e) => setEnquiryForm({ ...enquiryForm, message: e.target.value })}
+                    className="w-full px-3.5 py-2 text-xs border border-border-brand/40 rounded-xl focus:outline-none focus:border-primary-brand resize-none"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="w-full py-2.5 px-4 bg-[#1a1a1a] hover:bg-primary-brand text-white rounded-full text-xs font-semibold transition-all shadow-sm cursor-pointer"
+                >
+                  Submit Enquiry
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
