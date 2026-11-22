@@ -83,13 +83,15 @@ export default function WishlistPage() {
                     imageUrl={product.imageUrl}
                     images={product.metadata?.images || []}
                     marks={product.marks || []}
-                  badge={product.badge || product.metadata?.badge || ""}
+                    badge={product.badge || product.metadata?.badge || ""}
                     description={product.description}
                     onAddToCart={handleAddToCart}
                     quantity={product.quantity || product.metadata?.quantity}
                     unit={product.unit || product.metadata?.unit}
                     variants={product.variants}
                     options={product.options}
+                    links={product.links || []}
+                    metadata={product.metadata}
                   />
                 </div>
               ))}

@@ -602,7 +602,7 @@ export default function ProductDetailsClient({ id }) {
                   mrp={rec.mrp}
                   imageUrl={rec.imageUrl}
                   images={rec.metadata?.images || []}
-                  marks={product.marks || []}
+                  marks={rec.marks || []}
                   badge={rec.badge}
                   description={rec.description}
                   onAddToCart={(recId) => addToCart(recId, 1)}
@@ -610,6 +610,8 @@ export default function ProductDetailsClient({ id }) {
                   unit={rec.unit || rec.metadata?.unit}
                   variants={rec.variants}
                   options={rec.options}
+                  links={rec.links || []}
+                  metadata={rec.metadata}
                 />
               </div>
             ))}

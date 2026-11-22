@@ -111,6 +111,8 @@ export default function ProductSection() {
                   unit={product.unit || product.metadata?.unit}
                   variants={product.variants}
                   options={product.options}
+                  links={product.links || []}
+                  metadata={product.metadata}
                 />
               </div>
             ))}

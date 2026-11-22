@@ -117,6 +117,8 @@ export default function BleachSection() {
                   unit={product.unit || product.metadata?.unit}
                   variants={product.variants || []}
                   options={product.options || []}
+                  links={product.links || []}
+                  metadata={product.metadata}
                 />
               </div>
             ))}
